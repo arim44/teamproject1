@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c4adae72f5f551543aeacc28b3bf73d7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Blocks/block green.prefab
+  uploadId: 689502

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b488cf80de31cf9428d59adfb98fd781
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Blocks/block purple.prefab
+  uploadId: 689502

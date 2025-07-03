@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e603d7faeca2338459e92e8cdb56e380
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Demo/TriggerActivator.cs
+  uploadId: 689502

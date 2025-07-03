@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2a92b9c855a64934e834d63813e510de
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/HowToUse.txt
+  uploadId: 689502

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6862a0b772bb2d041b1b8101395b1159
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Demo/Player.prefab
+  uploadId: 689502

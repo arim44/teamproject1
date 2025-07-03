@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db7019ca45231df4ab3e666f1ccbcf8e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/General/Materials/hiscore.mat
+  uploadId: 689502

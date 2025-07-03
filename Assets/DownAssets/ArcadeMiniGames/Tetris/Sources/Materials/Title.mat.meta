@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cb748094fe05a1f479ad2a41e8f7791e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Materials/Title.mat
+  uploadId: 689502

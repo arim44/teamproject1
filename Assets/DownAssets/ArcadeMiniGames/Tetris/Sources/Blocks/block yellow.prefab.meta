@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 547f8ad14a76a274aa2c901f55481c84
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Blocks/block yellow.prefab
+  uploadId: 689502

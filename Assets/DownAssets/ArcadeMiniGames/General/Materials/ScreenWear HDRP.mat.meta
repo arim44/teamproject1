@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6efc9f0452b4da841aa9a8ac5cdf607a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/General/Materials/ScreenWear HDRP.mat
+  uploadId: 689502

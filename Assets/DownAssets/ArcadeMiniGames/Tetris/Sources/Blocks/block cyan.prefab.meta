@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c2fde9dc0800868448bb8c8e73c49df1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Blocks/block cyan.prefab
+  uploadId: 689502

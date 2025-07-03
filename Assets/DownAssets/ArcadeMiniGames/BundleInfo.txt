@@ -1,0 +1,15 @@
+Now that you have purchased the Arcade Minigames Bundle, 
+you can get the individual packages for free by going to their AssetStore pages:
+
+- Falling Blocks Arcade Minigame:
+https://assetstore.unity.com/packages/add-ons/falling-blocks-arcade-minigame-286498
+
+- Match3 Arcade Minigame:
+https://assetstore.unity.com/packages/tools/game-toolkits/match3-arcade-minigame-292860
+
+- Snake Arcade Minigame:
+https://assetstore.unity.com/packages/add-ons/snake-arcade-minigame-277466
+
+If you have any questions or suggestions, you can contact me at stevencraeynest@gmail.com
+
+Don't forget to leave a rating in the store if you like the assets!

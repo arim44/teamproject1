@@ -1,0 +1,15 @@
+Arcade Minigames
+------------------
+
+The Arcade Minigames are a set of assets.
+
+Folder Structur:
+- Each game has it's own unique folder within the "Arcade Minigames"-folder.
+- Shared files are contained in the "General"- and "Demo"-folders.
+
+Each arcade minigame can be implemented the same way.
+
+More info about each game can be found in the HowToUse.txt file in their own folder.
+
+If you have any comments, questions or suggestions, feel free to contact me at stevencraeynest@gmail.com
+End if you like the asset, don't forget to leave a rating on the asset store.

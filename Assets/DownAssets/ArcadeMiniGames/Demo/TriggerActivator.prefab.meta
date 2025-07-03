@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 63835d5339850e24fbd8bdc83dd1c067
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Demo/TriggerActivator.prefab
+  uploadId: 689502

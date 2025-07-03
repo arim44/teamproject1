@@ -1,0 +1,105 @@
+Tetris Arcade Minigame
+-----------------------
+
+The package has been renamed on the Asset Store to "Falling Blocks Arcade Minigame" due to the fact that the "Tetris"-name is trademarked.
+For convenience sake, I've kept the tetris name in the package here.
+However, none of the assets itself display the Tetris name anywhere (the game is instead called "Blocks" in and on the arcade-cabinet), or any of the other trademarked aspects of Tetris, so you can freely use the package as is.
+
+How To Use:
+-------------
+
+There are 2 ways to implement the Tetris minigame in your game:
+
+1. Use the TetriseGame-prefab as is in it's own scene, as demonstrated in the TetrisGameDemo-scene (you can even use the scene as is)
+No further work is required for this, just load the scene from anywhere to let the player play it.
+
+2. Use the TetrisArcade-prefab and place it in any environment as you see fit. As demonstrated in the TetrisArcadeDemo-scene.
+This option requires a little more work, but this allows the player to seamlessly play the arcade-game within your game-world.
+
+There are 2 TetrisArcade-prefabs, TetrisArcade- and TetrisArcadeAnimated.
+The animated one is the one used in the demo-scene, here the arcade's joystick and buttons react to the player's input, whereas in the non-animated one the joystick and buttons don't move. 
+(But everything else is exactly the same in both ofcourse) 
+
+There are a couple of simple scripts included to demonstrate how to implement the arcade into your game, which can all be seen in action in the TetrisArcadeDemo-scene.
+This scene also includes a simplified Player-object, this is just for demonstration, and you should not use this prefab, or the scripts attached to it, but instead your own Player-character. (But you can ofcourse reuse any of the code in scripts)
+The main thing here is the ArcadeInteractor-script (added to the TetrisArcade-instance), this let's the player start and stop playing the arcade-game (by setting inputController.InUse), and disables and enables the player's movement.
+
+In short, what you'll have to do is this:
+
+- Place the TetrisArcade-prefab (or TetrisArcadeAnimated) in the scene you want. 
+- Create your own script that does the same as the ArcadeInteractor-script (you can copy the code to start), but with your own player instead of the demo one, and attach it to the TetrisArcade-instance you just placed in the scene.
+- If you want, you can make it a prefab-variant, so you can easily place it in other scenes.
+
+
+BIRP, URP & HDRP:
+-------------------
+
+The arcademachine and demo scenes use different materials depending on the render pipeline.
+Each RP-folder contains a prefab variant of the BIRP-prefabs with some materials replaced.
+Simply use the folder that matches your RP.
+
+You can remove the HDRP or URP folders if you don't need them, but always keep the BIRP folder, as this contains the original prefabs.
+
+You'll notice that the TetrisGame-prefab and demo-scene don't have different RP-versions, that is because these use Unlit-materials which work in all RP.
+
+
+Input:
+--------
+
+The controls to play the game are defined in the InputController-script attached to the TetrisArcade.
+The InputController uses Unity's old Input system, in order for this to work the "Active Input Handling" in Project Settings > Player > Other Settings > Configuration needs to be set to either "Input Manager (Old)" or "Both".
+All the input strings defined in the InputController (as well as in the ArcadeInteractor, if you use it) need to be valid input axes defined in the Input Manager, otherwise they will not work.
+
+
+Communication with your own game:
+-----------------------------------
+
+The TetrisController-script attached to the TetrisArcade is the main script.
+This inherits from BaseController, which is the base-class for all the arcade minigames, so that you can communicate with each of these the same way.
+
+- You can set the saved highscores in the arcadegame by calling SetHiScores()
+This is demonstrated in the ArcadeInteractor-script, e.g.: arcadeController.SetHiScores(9999, 1337, 99, 10);
+
+- Likewise you can get the highscores by calling GetHiScores()
+You should save these highscores in the player's savedata to ensure the player retains his hiscores.
+
+- You can assign a function to be called when the player has a gameover in the arcadegame. This returns the player's score, if he has scored a new higshcore and his ranking in the highscores. You could use this to unlock something in your own game, or award an achievement or similar. 
+This is demonstrated in the ArcadeInteractor-script, e.g.: arcadeController.OnGameEnd += OnGameEnd;
+
+-Enable StartActivated in the inspector to have the arcade start activated (On). This is seperate from actually interacting with the arcade. 
+-Activate() and Deactive() turn the arcade on and off. Not necessary to use, you can just leave it activated at all times.
+
+
+Game Customisation:
+---------------------
+
+Everything can be used as is, but you can also easily replace the colors, textures, sfx and music as you see fit.
+
+You can also easily create your own shapes!
+The default tetris-like ones are in the Shapes-folder, and some special ones are in the Shapes2- and Shapes3-folders.
+To create your own, simply create an empty gameobject and add the Shape-script to it (or just duplicate one of the existing shapes), then add cells to it in the Shape-script.
+The shapes don't have to contain 4 cells, but there are some constraints:
+-minimum 1 cell (and technically, maximum 25 cells)
+-multiple cells can't have the same position
+-for each cell: x and y should be minimum -2, maximum 2
+
+There are also a couple of parameters to set in the inspector (on the TetrisController-script) to alter the gameplay:
+
+-Shapes: Define which shapes to use.
+-Bag Size: The bigger the number, the more randomised the shape-spawns are. When a shape needs to spawn, all shapes are taken from a "bag" in random order. when the bag is empty, the bag is filled again. The bag size is the amount of each shape that is placed in the bag. 
+-Grid X; the number of columns in the grid, the play-area. The smaller the more difficult. 10 By default, minimum 6, max 13. You could go bigger than 13, but you would have to make some adjustments to some things in the PlayField to make it all fit.
+-Clears To Level Up: How many lines need to be cleared to go to the next level, which decreases Fall-Delay and increases the scores earned.
+-Start Fall Delay: the time it takes for a shape to fall a single cell, at the start of the game.
+-Fall Delay Multiplier: Every level you go up multiplies the Fall-Delay with this, keep this between 0 and 1. (Set at 1 to not decrease the Fall-Delay)
+
+You can also remove the CRT-effect-material or the ScreenWear-material from the ScreenEffect if you're not a fan of these.
+
+As of version 1.1, there are a couple of different textures for the blocks you can use, just change to texture in the block-materials to use a different one.
+
+
+Music: 
+-------
+
+Currently no music is included, but you can assign any audio-file as background music for the game.
+Simply assign it to the AudioSource on the "Music"-GameObject (TetrisArcade -> GameContainer -> Music), and it will automatically start and stop playing correctly.
+The demo-video and webgame on the store use a free BenSound-track. (Which you can find here: www.bensound.com)

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 23068b282d686e846ac569ce7a027472
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298738
+  packageName: Arcade Minigames Bundle
+  packageVersion: 1.0
+  assetPath: Assets/ArcadeMiniGames/BundleInfo.txt
+  uploadId: 699049

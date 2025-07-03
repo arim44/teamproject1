@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e2b26cabc277943488b56e66b39196db
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 296224
+  packageName: XRKJ (XR Kinematic Joystick)
+  packageVersion: 1.0
+  assetPath: Assets/OHGAR/XRKJ/XRKJ Materials/XRKJ Egshell White.mat
+  uploadId: 707529

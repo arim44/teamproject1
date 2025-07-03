@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f6ed42ff738d55b45b02da0df1b15d22
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Shapes/Shape J.prefab
+  uploadId: 689502

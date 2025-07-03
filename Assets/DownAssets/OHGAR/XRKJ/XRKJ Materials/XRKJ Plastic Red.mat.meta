@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 62aa3333c296fa74cb4c12f2b86e2137
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 296224
+  packageName: XRKJ (XR Kinematic Joystick)
+  packageVersion: 1.0
+  assetPath: Assets/OHGAR/XRKJ/XRKJ Materials/XRKJ Plastic Red.mat
+  uploadId: 707529

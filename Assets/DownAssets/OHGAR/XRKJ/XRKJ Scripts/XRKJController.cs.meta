@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 14ee9f3ae12c99e4cac9ba7b3f7fd99e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 296224
+  packageName: XRKJ (XR Kinematic Joystick)
+  packageVersion: 1.0
+  assetPath: Assets/OHGAR/XRKJ/XRKJ Scripts/XRKJController.cs
+  uploadId: 707529

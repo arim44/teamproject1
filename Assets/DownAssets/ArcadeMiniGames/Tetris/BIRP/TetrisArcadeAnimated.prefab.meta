@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 704d1891b9c678e41b399cd012bebeb0
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/BIRP/TetrisArcadeAnimated.prefab
+  uploadId: 689502

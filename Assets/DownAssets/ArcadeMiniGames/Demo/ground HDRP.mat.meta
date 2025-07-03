@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 366f2779aceb89f4e8126a1a8c48c60b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Demo/ground HDRP.mat
+  uploadId: 689502

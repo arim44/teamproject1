@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1393b7d42b4f1144ca61e8f67e30870b
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/URP/TetrisArcadeDemo.unity
+  uploadId: 689502

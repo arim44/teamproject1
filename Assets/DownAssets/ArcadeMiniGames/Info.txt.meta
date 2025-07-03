@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fd1b65be9c6f84c42b56e7c7eee73c70
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Info.txt
+  uploadId: 689502

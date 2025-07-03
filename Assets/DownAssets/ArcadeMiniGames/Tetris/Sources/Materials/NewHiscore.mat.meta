@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4018dc0e6822e89458e216eb48c17151
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286498
+  packageName: Falling Blocks Arcade Minigame
+  packageVersion: 1.1.2
+  assetPath: Assets/ArcadeMiniGames/Tetris/Sources/Materials/NewHiscore.mat
+  uploadId: 689502
