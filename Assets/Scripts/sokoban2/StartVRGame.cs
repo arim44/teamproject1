@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class StartVRGame : MonoBehaviour
 {
-    //To do..
-    // 게임매니저에서 게임이 끝날때까지 계속 돌림
     private GameManager gameManager;
 
     private void Awake()
@@ -14,12 +12,20 @@ public class StartVRGame : MonoBehaviour
 
     private void Start()
     {
+        StartRetrokoban();
+    }
+
+    // 레트로코반 시작!!(VR 프로그램 시작)
+    private void StartRetrokoban()
+    {
         bool running = true;
 
         while (running)
         {
             running = gameManager.Process(); //프로세스가 end가 되면 false반환해서 와일문 종료
         }
+
+        // 레트로코반 종료
         ExitGame();
     }
 

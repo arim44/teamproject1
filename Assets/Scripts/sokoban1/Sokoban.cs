@@ -5,14 +5,14 @@ using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 
-public enum Direction
-{
-    None,
-    Left,
-    Right,
-    Up,
-    Down
-}
+//public enum Direction
+//{
+//    None,
+//    Left,
+//    Right,
+//    Up,
+//    Down
+//}
 
 namespace Sokoban
 {
@@ -79,7 +79,7 @@ namespace Sokoban
         private int width;
         private int height;
 
-
+        //방향 설정
         public void SetDirection(Direction direction)
         {
             this.direction = direction;
@@ -95,8 +95,6 @@ namespace Sokoban
         //아이템을 저장할 공간을 순회하고 Box가 없으면 false
         private bool IsLevelCleared()
         {
-
-
             for (int i = 0; i < goalPositions.Count; i++)
             {
                 int row = goalPositions[i].Y;
@@ -132,22 +130,30 @@ namespace Sokoban
             // 스프라이트 배열을 생성
             sprites = new SpriteRenderer[height, width];
 
+            // 스테이지 생성
             stageGameObject = Instantiate(stageObj, Vector3.zero, Quaternion.identity);
+            // 스테이지 부모 오브젝트의 트랜스폼
             Transform rootTransform = stageGameObject.transform;
 
+            // rootTransform 오브젝트 밑에 있는 스테이지들 수만큼 반복
             for (int i = 0; i < rootTransform.childCount; i++)
             {
+                // 위에서부터 순서대로 child에 넣음 
                 Transform child = rootTransform.GetChild(i);
                 var rc = child.name.Split(",");
+                //  rc name 입력받음
                 int.TryParse(rc[0], out int row);
                 int.TryParse(rc[1], out int column);
 
-                // 스프라이트 배열에 요소를 채움
+                // 스프라이트 배열에 요소를 채움(row,column 위치에 각각 스프라이트 넣음)
                 sprites[row, column] = child.GetComponent<SpriteRenderer>();
             }
 
+            // 카메라 위치 설정
+            // 카메라가 없고 카메라 포지션의 수가 0보다 크면
             if (gameCamera != null && cameraPositions.Count > 0)
             {
+
                 Vector3 position = cameraPositions[stage];
                 position.z = gameCamera.transform.position.z;
                 // cameraPositions List를 <Position>이 아닌 <Vector2>로 해놓으면 사용가능
@@ -160,21 +166,20 @@ namespace Sokoban
                 //gameCamera.transform.position = position;
             }
 
-            //배열을 할당
+            //현재 보드에 배열을 할당
             currentBoard = new int[height, width];
 
             //스테이지 데이터를 CurrtentBoard에복사함
             Array.Copy(stages[stage].Map, currentBoard, currentBoard.Length);
-
-            // Player 위치 찾아오기
-            player = FindFirstObjectByType<Player>();
-
 
             // 스테이지에서 아이템을 저장할 공간을 찾음
             FindGoalPositions();
 
             // 캐릭터의 위치를 찾음
             FindPlayerPosition();
+
+            // Player 스크립트 찾아오기
+            player = FindFirstObjectByType<Player>();
 
             // 플레이어의 위치를 이동시킴
             player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y);
@@ -400,6 +405,7 @@ namespace Sokoban
             IsGoalEmpty();
 
             //게임이 클리어 되었을 때 처리
+            // 골이 비어있지 않으면
             if (IsLevelCleared())
             {
                 if (currentStage >= totalStageCount)
