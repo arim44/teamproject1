@@ -4,7 +4,7 @@ using OHGAR;
 public class GameScene : MonoBehaviour
 {
     public bool joystickInput = false;
-    private Sokoban.Sokoban sokoban;
+    private RetroSokoban.Sokoban sokoban;
     public TitleCanvas titleCanvas;
     public Player player;
 
@@ -19,7 +19,7 @@ public class GameScene : MonoBehaviour
 
     private void Awake()
     {
-        sokoban = FindFirstObjectByType<Sokoban.Sokoban>();
+        sokoban = FindFirstObjectByType<RetroSokoban.Sokoban>();
         titleCanvas = FindFirstObjectByType<TitleCanvas>();
         player = FindFirstObjectByType<Player>();
     }

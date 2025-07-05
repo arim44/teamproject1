@@ -1,3 +1,4 @@
+using RetroSokoban;
 using Sokoban;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ public class StartVRGame : MonoBehaviour
         ExitGame();
     }
 
+    // 프로그램 종료
     private void ExitGame()
     {
         print("프로그램 종료");
@@ -41,3 +43,33 @@ public class StartVRGame : MonoBehaviour
 #endif
     }
 }
+
+
+//using RetroSokoban;
+//using UnityEngine;
+
+//public class StartVRGame : MonoBehaviour
+//{
+//    private GameManager gameManager;
+
+//    private void Awake()
+//    {
+//        gameManager = FindFirstObjectByType<GameManager>();
+//    }
+
+//    private void Start()
+//    {
+//        StartRetrokoban();
+//    }
+
+//    // 레트로코반 시작!!(VR 프로그램 시작)
+//    private void StartRetrokoban()
+//    {
+//        bool running = true;
+
+//        while (running)
+//        {
+//            running = gameManager.Process(); //프로세스가 end가 되면 false반환해서 와일문 종료
+//        }
+//    }
+//}

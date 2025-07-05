@@ -14,7 +14,7 @@ using static UnityEngine.Rendering.DebugUI.Table;
 //    Down
 //}
 
-namespace Sokoban
+namespace RetroSokoban
 {
     // 사용자가 정의한 데이터는 [Serializable]직렬화를 사용해야만 에디터에서 확인
     [Serializable]

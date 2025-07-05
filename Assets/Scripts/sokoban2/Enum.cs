@@ -1,22 +1,18 @@
 
-namespace Sokoban
+public enum GameMode
 {
-    public enum GameMode
-    {
-        Start,
-        Lobby,
-        Sokoban,
-        End,
-        //Shop    //상점이나 다른걸 만들면 여기에 모드 추가
-    }
+    Start,
+    //Lobby,
+    Main,
+    Sokoban,
+    End,
+}
 
-
-    public enum Direction
-    {
-        None,
-        Left,
-        Right,
-        Up,
-        Down
-    }
+public enum Direction
+{
+    None,
+    Left,
+    Right,
+    Up,
+    Down
 }
