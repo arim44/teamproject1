@@ -1,5 +1,4 @@
 using RetroSokoban;
-using Sokoban;
 using UnityEngine;
 
 public class StartVRGame : MonoBehaviour

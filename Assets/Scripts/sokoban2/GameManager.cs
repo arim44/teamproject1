@@ -85,7 +85,7 @@ namespace RetroSokoban
 
             // 스타트에서? 메인에서?
             // 소코반 초기세팅    
-            sokobanManager.InitializeSokoban();
+            sokobanManager?.InitializeSokoban();
         }
 
         // 메인 모드 프로세스
@@ -94,7 +94,7 @@ namespace RetroSokoban
             // 인게임 실행
 
             // 소코반 실행
-            sokobanManager.StartSokoban();
+            sokobanManager?.StartSokoban();
 
             // 공지 UI활성(전체 반투명 배경으로 레이캐스트 끔), 배경 블러
             // 시작 버튼 클릭 시 공지 비활성, 배경정상

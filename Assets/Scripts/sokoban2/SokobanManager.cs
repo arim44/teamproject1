@@ -286,7 +286,7 @@ namespace RetroSokoban
             FindPlayerPosition();
 
             //키 입력을 받아서 처리하는 내용
-            iOManager.InputMoveKey(direction);
+            iOManager?.InputMoveKey(direction);
 
             // 골자리가 비어있으면 다시 그리기
             IsGoalEmpty();
