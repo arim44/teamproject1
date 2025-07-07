@@ -49566,8 +49566,8 @@ MonoBehaviour:
     \uC990\uACA8 \uD50C\uB808\uC774\uD588\uC9C0\uB9CC, \r\n\uD55C \uBC88\uB3C4 \uB05D\uAE4C\uC9C0
     \uD074\uB9AC\uC5B4 \uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4\u2026\r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8605534e5d90d0142b6925a72da47916, type: 2}
+  m_sharedMaterial: {fileID: 2284729215061265783, guid: 8605534e5d90d0142b6925a72da47916, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -49591,8 +49591,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
