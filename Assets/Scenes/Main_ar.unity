@@ -3218,7 +3218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1934272620
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -79690,12 +79690,12 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 6111286855969322914}
   - {fileID: 1890013573}
   - {fileID: 877435958}
   - {fileID: 1289419246}
   - {fileID: 1510770096}
   - {fileID: 366306735}
+  - {fileID: 6111286855969322914}
   - {fileID: 492628632}
   - {fileID: 1934272623}
   - {fileID: 2137901167}
