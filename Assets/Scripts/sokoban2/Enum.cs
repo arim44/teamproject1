@@ -6,6 +6,7 @@ public enum GameMode
     Main,
     Sokoban,
     End,
+    Exit
 }
 
 public enum Direction
