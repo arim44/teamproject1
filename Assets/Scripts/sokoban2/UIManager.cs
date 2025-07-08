@@ -1,4 +1,6 @@
+using ArcadeMiniGames;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.MPE;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +47,8 @@ namespace RetroSokoban
 
         private GameManager _gameManager;       // 게임매니저
         private SokobanManager _skobanManager;  // 소코반 매니저
+
+        private int pnlNoticeCount = 0;
 
 
         private void Awake()
@@ -93,10 +97,6 @@ namespace RetroSokoban
                 case GameMode.Main:
                     objMain.SetActive(value);
                     break;
-
-                case GameMode.Sokoban:
-                    objSokoban.SetActive(value);
-                    break;
             }
         }
 
@@ -138,9 +138,10 @@ namespace RetroSokoban
             // 비활성만 한거라 파괴한게 아니어서 널이 될리 없음.... 다시 생각
             if (hpHearts != null)
             {
-                hpHearts[heartNumber].SetActive(false);
+                //hpHearts[heartNumber].SetActive(false);
+                Destroy(hpHearts[heartNumber]);
             }
-            else return;
+            else Debug.LogWarning("하트가 없습니다");
         }
 
         // 타이틀 캔버스
@@ -155,6 +156,12 @@ namespace RetroSokoban
             pnlNotice[0].SetActive(true);
         }
 
+        //타임오버시ui 켜기
+        public void SetTimeOverActive()
+        {
+            pnlTimeOver.SetActive(true);
+        }
+
 
         ////////////// 버튼 관련 기능 //////////////
         
@@ -163,32 +170,36 @@ namespace RetroSokoban
         public void OnStartRetrokobanClicked()
         {
             pnlStartMenu.SetActive(false);
+            OpenNotice(0);
         }
 
-
-
-        public void OnNextButtonClicked()
+        private void OpenNotice(int number)
         {
-
-        }
-
-        public void OnCloseNoticeClicked(GameObject botton)
-        {
-            botton.SetActive(false);
-        }
-
-        
-        private void NextNoticePnl(int number)
-        {
-            // 현재 공지 끔
-            pnlNotice[number].SetActive(false);
-
-            //다음 공지 켜기
             pnlNotice[number].SetActive(true);
         }
 
+        // next 버튼 클릭
+        public void OnNextButtonClicked()
+        {
+            // 현재 공지 끄기
+            pnlNotice[pnlNoticeCount].SetActive(false);
+            pnlNoticeCount += 1;
+            //다음 공지 켜기
+            OpenNotice(pnlNoticeCount);
+        }
 
+        public void OnCloseNoticeClicked()
+        {
+            pnlNotice[pnlNoticeCount].SetActive(false);
+            pnlNoticeCount += 1;
 
+            //// pnlNotice 안에 있는 공지 다끔 => 적용이 안됨
+            //for (int i = 0; i < pnlNoticeCount; i++)
+            //{
+            //    pnlNotice[i].SetActive(false);
+            //}            
+        }
+       
         // 소코반 게임내 버튼
         // 인게임 UI에서 뒤로가기 버튼을 클릭
         public void OnMenuClicked()
@@ -215,6 +226,7 @@ namespace RetroSokoban
             {
                 // 하트차감, 스테이지 리셋, 타이머리셋
                 _skobanManager.StageReset();
+                pnlTimeOver.SetActive(false);
             }
             else
             {

@@ -100,11 +100,12 @@ namespace RetroSokoban
         // 메인 모드 프로세스
         private void ProcessMain()
         {
+            // 소코반 초기세팅
+            _sokobanManager?.InitializeSokoban();
             // 인VR
             _uiManager.SetUIMode(_gameMode);    //mainUi 활성
 
-            // 소코반 초기세팅
-            _sokobanManager?.InitializeSokoban();
+            
             
             // 메인ui 열면 공지 보임(버튼클릭으로 넘어감)
 

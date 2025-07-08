@@ -685,10 +685,7 @@ namespace RetroSokoban
         public void TimeOver()
         {
             // 타임오버 UI 활성
-            //_uiManager.SetUIActive(objTimeOver, true);
-
-            // 테스트로 하트 감소 나중엔 재시작 버튼 클릭 시 하트감소
-            StageReset();
+            _uiManager.SetTimeOverActive();
         }
 
         private void HeartReset()

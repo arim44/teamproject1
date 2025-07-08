@@ -29,5 +29,10 @@ namespace RetroSokoban
             if (heartCount == 0) heartCount = 0;
             return heartCount;
         }
+
+        public int GetHeartCount()
+        {
+            return heartCount;
+        }
     }
 }
