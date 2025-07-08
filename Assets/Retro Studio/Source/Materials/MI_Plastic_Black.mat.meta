@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 0f11bfe80e5d3f840a6ebe73c00a6d4a
+guid: 258e718eb3d916a46bc00adb486a05c6
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Plastic_Black.mat
-  uploadId: 488947

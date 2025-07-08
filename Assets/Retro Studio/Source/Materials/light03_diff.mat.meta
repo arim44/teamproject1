@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 0760a284266a54d42b86a902d04c54ba
+guid: 0abf3ced40b195240a2ebda3a41f77ac
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/light03_diff.mat
-  uploadId: 488947

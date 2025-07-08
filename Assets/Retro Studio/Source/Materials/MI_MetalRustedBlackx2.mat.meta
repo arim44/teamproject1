@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 02a7ed3c774e88c40bd8d29793a651bb
+guid: 5aa0f5a03743e1d4da4163aca97fbb86
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_MetalRustedBlackx2.mat
-  uploadId: 488947

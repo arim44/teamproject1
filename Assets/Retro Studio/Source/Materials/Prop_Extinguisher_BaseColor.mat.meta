@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 5e86b3bcf310c6c4eaebdab2718c36b5
+guid: e311d98bc4225554881934a5159bbbf6
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/Prop_Extinguisher_BaseColor.mat
-  uploadId: 488947

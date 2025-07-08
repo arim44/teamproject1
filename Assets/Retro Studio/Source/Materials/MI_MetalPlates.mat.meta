@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 266ef46497b90f248aff1da1e2d1a122
+guid: 82de0378dd0cd0b4d8d0e483a2f3a510
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_MetalPlates.mat
-  uploadId: 488947

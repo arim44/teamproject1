@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: b21d16b4ed5dfcb4799db3da4b0bfc5c
+guid: f526f7be7072e544d98d7e3aaec04386
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_MetalDirt.mat
-  uploadId: 488947

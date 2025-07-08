@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: d20f6a13af699914ca3451da411d64ad
+guid: 5fbd13b68fd75fe4a8b390b1e470382f
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_TextilBlue.mat
-  uploadId: 488947
