@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 949954d8a6c8fa74e8ec82f9795f9735
+guid: f78d2000023d2924e845c0daf41e7e2a
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_GlowOrange.mat
-  uploadId: 488947

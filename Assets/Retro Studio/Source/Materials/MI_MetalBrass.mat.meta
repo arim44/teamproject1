@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: b9396b85b57b3a14da80aefc469c035b
+guid: c23d5b643a4344d40a0ea0f646a496f8
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_MetalBrass.mat
-  uploadId: 488947

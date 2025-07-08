@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: db4dcf7cbc0bf76428ece6344e7b4ec4
+guid: 95e0616586aa73741b4a213df4460abd
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Concrete.mat
-  uploadId: 488947

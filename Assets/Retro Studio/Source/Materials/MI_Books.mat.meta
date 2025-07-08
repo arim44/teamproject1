@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 7d9c349bb86ebdd48b329e324b7c336c
+guid: 75f10ecb3840a06409b07662825a69bd
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Books.mat
-  uploadId: 488947

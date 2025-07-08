@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: da1aa32f86b844a46b6a05a804f72a48
+guid: 6332f3dc116b56f43acb809ada6a04b1
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_streetlight.mat
-  uploadId: 488947

@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 087363b64c9e0f44f91bd8cdb007c1c6
+guid: 1e1e288da10b0b646bcc43810d066ba2
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Glow_Red.mat
-  uploadId: 488947

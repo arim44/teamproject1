@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: a710c6db9bfb9c5409a2efa9e5ee7d9d
+guid: 341318978dbc0494aaa5bf7c98e13cbe
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Plastic_Beige.mat
-  uploadId: 488947

@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: ce46b865194b2204cb7d5b3272971301
+guid: b96ee01fc4088eb43a6f89f118429b00
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_Wallpaper 2.mat
-  uploadId: 488947

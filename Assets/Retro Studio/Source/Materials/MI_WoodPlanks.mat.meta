@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 6c64e8392ca358147ab540117688d211
+guid: 3f0d625253b7c2c4a809ed02529440f6
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_WoodPlanks.mat
-  uploadId: 488947

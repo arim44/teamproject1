@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 8ee6ebdf48e588b4c859d233fedf9978
+guid: 4963a90ce3aad694eaf68e3652c0e105
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_MetalPipe.mat
-  uploadId: 488947

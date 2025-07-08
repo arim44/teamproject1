@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 702dd4d4f92acf3478ec8f649df902a0
+guid: 6c5078f4371e3964fa975e2519db14d5
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216767
-  packageName: Retro Studio
-  packageVersion: 1.0
-  assetPath: Assets/Retro Studio/Source/Materials/MI_GlowRed.mat
-  uploadId: 488947
