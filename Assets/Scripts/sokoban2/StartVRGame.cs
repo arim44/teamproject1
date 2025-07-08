@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class StartVRGame : MonoBehaviour
 {
-    private GameManager gameManager;
+    private GameManager _gameManager;
 
     private void Awake()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
+        _gameManager = FindFirstObjectByType<GameManager>();
     }
 
     private void Start()
     {
         //StartRetrokoban();
-        gameManager.Process();
+        _gameManager.Process();
     }
 
     // 레트로코반 시작!!(VR 프로그램 시작)
@@ -23,7 +23,7 @@ public class StartVRGame : MonoBehaviour
 
         while (running)
         {
-            running = gameManager.Process(); //프로세스가 end가 되면 false반환해서 와일문 종료
+            running = _gameManager.Process(); //프로세스가 end가 되면 false반환해서 와일문 종료
         }
 
         // 레트로코반 종료

@@ -98,8 +98,8 @@ namespace RetroSokoban
             //하트 초기화
             HeartReset();
 
-            // 현재 스테이지를 구성(밑에 있는거 위로 올림)
-            Setupstage(currentStage - 1);
+            // 현재 스테이지를 구성(밑에 있는거 위로 올림) 시작버튼 누르면 구성으로 변경
+            //Setupstage(currentStage - 1);
         }
 
         // 소코반 시작
@@ -669,8 +669,6 @@ namespace RetroSokoban
             }
         }
 
-
-
         /// <summary>
         /// 게임 리셋
         /// </summary>
@@ -690,11 +688,12 @@ namespace RetroSokoban
             //_uiManager.SetUIActive(objTimeOver, true);
 
             // 테스트로 하트 감소 나중엔 재시작 버튼 클릭 시 하트감소
-            DeHeart();
+            StageReset();
         }
 
         private void HeartReset()
         {
+            // 하트갯수 초기화
             _heartHealth.SetHeartCount();
         }
 
@@ -710,19 +709,20 @@ namespace RetroSokoban
         {
             _countdownTimer.CountdownInitialized();
         }
-        
 
-        //현재스테이지 재시작(재시작 버튼 클릭)
+
+        //현재스테이지 리플레이(리플레이 버튼 클릭)
         public void StageReset()
         {
+            //하트차감
+            DeHeart();
+
             // 현재 스테이지 번호
-            // currentStage = currentStage;
+            // currentStage = currentStage
+
             // 현재 스테이지를 구성
             Setupstage(currentStage - 1);
         }
-
-
-
 
     } // 소코반 매니저 클래스
 }
