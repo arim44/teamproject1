@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 
@@ -10,6 +11,9 @@ namespace RetroSokoban
         [SerializeField] UIManager _uiManager;
         [SerializeField] SokobanManager _sokobanManager;
         [SerializeField] private CountdownTimer _countdownTimer;
+        [SerializeField] private AmbientModeSwitcher _ambientModeSwitcher;
+        [SerializeField] private GameObject hideGroup;
+        [SerializeField] private MaterialChanger[] _materialChangers;
 
         // 게임모드 변수
         private GameMode _gameMode = GameMode.Start;
@@ -23,6 +27,10 @@ namespace RetroSokoban
             _uiManager = FindFirstObjectByType<UIManager>();
             _sokobanManager = FindFirstObjectByType<SokobanManager>();
             _countdownTimer = FindFirstObjectByType<CountdownTimer>();
+            _ambientModeSwitcher = FindFirstObjectByType<AmbientModeSwitcher>();
+            _materialChangers = FindObjectsByType<MaterialChanger>(FindObjectsSortMode.None);
+
+            FindAnyObjectByType<TitleCanvas>(FindObjectsInactive.Include);
         }
 
         private void Start()
@@ -102,11 +110,13 @@ namespace RetroSokoban
         {
             // 소코반 초기세팅
             _sokobanManager?.InitializeSokoban();
+
+            
             // 인VR
             _uiManager.SetUIMode(_gameMode);    //mainUi 활성
 
-            
-            
+
+
             // 메인ui 열면 공지 보임(버튼클릭으로 넘어감)
 
             // 공지 UI활성(전체 반투명 배경으로 레이캐스트 끔), 배경 블러
@@ -138,6 +148,48 @@ namespace RetroSokoban
             UnityEditor.EditorApplication.isPlaying = false;    //에디터의 플레이버튼 끔
 #endif
         }
+
+        // 스튜디오의 스위치 켰을때
+        public void OnLightSwitchOn()
+        {
+            // 깜빡깜빡 했다가 활성 고정
+            if (hideGroup != null)
+            {
+                hideGroup.SetActive(true);
+                Invoke("OffhideGroup", 0.5f);                
+            }
+            // 1초후 스카이박스로 모드변경
+            Invoke("SetAmientMode", 2f);
+        }
+
+        private void OffhideGroup()
+        {
+            hideGroup.SetActive(false);
+        }
+
+        private void SetAmientMode()
+        {
+            hideGroup.SetActive(true);
+            _ambientModeSwitcher.InitializeAmbientMode(true, Color.gray);
+        }
+
+        //스크린 전부 페이드인
+        private void FadeAllIn()
+        {
+            foreach(var changer in _materialChangers)
+            {
+                changer.FadeIn();
+            }
+        }
+
+        private void FadeAllOut()
+        {
+            foreach(var changer in _materialChangers)
+            {
+                changer.FadeOut();
+            }
+        }
+
 
     }   // GameManager 클래스
 }
