@@ -186,8 +186,7 @@ namespace RetroSokoban
         public void OnCloseNoticeClicked()
         {
             pnlNotice[pnlNoticeCount].SetActive(false);
-            pnlNoticeCount += 1;
-
+            pnlNoticeCount += 1;            
             //// pnlNotice 안에 있는 공지 다끔 => 적용이 안됨
             //for (int i = 0; i < pnlNoticeCount; i++)
             //{
