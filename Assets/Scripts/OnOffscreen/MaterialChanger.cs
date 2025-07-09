@@ -36,7 +36,7 @@ public class MaterialChanger : MonoBehaviour
     }
     public void FadeOut()
     {
-        Fade(Color.white, Color.black, 1);
+        Fade(Color.white, Color.black, 0.1f);
     }
 
     // Update is called once per frame

@@ -29,8 +29,6 @@ namespace RetroSokoban
             _countdownTimer = FindFirstObjectByType<CountdownTimer>();
             _ambientModeSwitcher = FindFirstObjectByType<AmbientModeSwitcher>();
             _materialChangers = FindObjectsByType<MaterialChanger>(FindObjectsSortMode.None);
-
-            FindAnyObjectByType<TitleCanvas>(FindObjectsInactive.Include);
         }
 
         private void Start()
@@ -101,8 +99,11 @@ namespace RetroSokoban
         //스타트모드 프로세스
         private void ProcessStart()
         {
+            // 스크린 끄기
+            FadeAllOut();
             // 3초뒤 메인모드로 변경
-            SetgameMode(GameMode.Main);         //main 프로세스 시작            
+            SetgameMode(GameMode.Main);         //main 프로세스 시작
+
         }
 
         // 메인 모드 프로세스
@@ -111,9 +112,9 @@ namespace RetroSokoban
             // 소코반 초기세팅
             _sokobanManager?.InitializeSokoban();
 
-            
             // 인VR
             _uiManager.SetUIMode(_gameMode);    //mainUi 활성
+
 
 
 
@@ -152,39 +153,34 @@ namespace RetroSokoban
         // 스튜디오의 스위치 켰을때
         public void OnLightSwitchOn()
         {
-            // 깜빡깜빡 했다가 활성 고정
-            if (hideGroup != null)
+            if (_materialChangers != null)
             {
-                hideGroup.SetActive(true);
-                Invoke("OffhideGroup", 0.5f);                
+                FadeAllIn();
             }
+
             // 1초후 스카이박스로 모드변경
             Invoke("SetAmientMode", 2f);
         }
 
-        private void OffhideGroup()
-        {
-            hideGroup.SetActive(false);
-        }
-
+        /// <summary>
+        /// 모드변경, 스카이박스
+        /// </summary>
         private void SetAmientMode()
         {
-            hideGroup.SetActive(true);
             _ambientModeSwitcher.InitializeAmbientMode(true, Color.gray);
         }
 
         //스크린 전부 페이드인
-        private void FadeAllIn()
+        public void FadeAllIn()
         {
-            foreach(var changer in _materialChangers)
+            foreach (var changer in _materialChangers)
             {
                 changer.FadeIn();
             }
         }
-
         private void FadeAllOut()
         {
-            foreach(var changer in _materialChangers)
+            foreach (var changer in _materialChangers)
             {
                 changer.FadeOut();
             }
