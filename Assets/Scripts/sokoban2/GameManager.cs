@@ -12,7 +12,6 @@ namespace RetroSokoban
         [SerializeField] SokobanManager _sokobanManager;
         [SerializeField] private CountdownTimer _countdownTimer;
         [SerializeField] private AmbientModeSwitcher _ambientModeSwitcher;
-        [SerializeField] private GameObject hideGroup;
         [SerializeField] private MaterialChanger[] _materialChangers;
 
         // 게임모드 변수
@@ -158,8 +157,14 @@ namespace RetroSokoban
                 FadeAllIn();
             }
 
+            // 노티스 4 활성
+            _uiManager.OpenNotice(4);
+
             // 1초후 스카이박스로 모드변경
-            Invoke("SetAmientMode", 2f);
+            Invoke("SetAmientMode", 1.5f);
+
+            // 소코반 까만화면 비활성
+            _uiManager?.OffExitSokoban();
         }
 
         /// <summary>

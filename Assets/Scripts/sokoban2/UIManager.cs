@@ -10,15 +10,11 @@ namespace RetroSokoban
     public class UIManager : MonoBehaviour
     {
         [Header("Util")]
-        [SerializeField] private TMP_Text txtNotice;    //알림 텍스트(공지)
+        private TMP_Text txtNotice;    //알림 텍스트(공지)
         [SerializeField] private GameObject objStart;   //스타트UI 오브젝트(게임모드가 Start일때 켠다)
         [SerializeField] private GameObject objMain;    //메인UI 오브젝트(게임모드가 Main일때 켠다)
-        [SerializeField] private GameObject objSokoban; //소코반UI 오브젝트(게임모드가 고민중 일때 켠다)
-
-        [Header("Start")]
-        // 인트로 1
-        [SerializeField] private GameObject objIntro;   //인트로패널 => 필요없으면 지우기
-
+        //[SerializeField] private GameObject objSokoban; //소코반UI 오브젝트(게임모드가 고민중 일때 켠다)
+               
         [Header("Main")]
         // 메뉴, 공지, 시작버튼
         [SerializeField] private Button btnStartRetrokoban;      //레트로코반 시작버튼
@@ -35,6 +31,7 @@ namespace RetroSokoban
         //타임오버 화면, 게임오버 화면, 클리어 화면, 종료화면(검정)
         [SerializeField] private GameObject pnlTimeOver;    //타임오버 화면
         [SerializeField] private GameObject pnlGameOver;    //게임오버 화면
+        [SerializeField] private GameObject pnlInfoNextStage;    //게임오버 화면
         [SerializeField] private GameObject pnlGameClear;   //게임클리어 화면
         [SerializeField] private GameObject pnlGameExit;    //게임종료 화면
 
@@ -48,7 +45,7 @@ namespace RetroSokoban
         private GameManager _gameManager;       // 게임매니저
         private SokobanManager _skobanManager;  // 소코반 매니저
 
-        private int pnlNoticeCount = 0;
+        [SerializeField] private int pnlNoticeCount = 0;
 
 
         private void Awake()
@@ -157,6 +154,11 @@ namespace RetroSokoban
             pnlTimeOver.SetActive(true);
         }
 
+        public void OpenInfoNextStage()
+        {
+            pnlInfoNextStage.SetActive(true);
+        }
+
 
         ////////////// 버튼 관련 기능 //////////////
 
@@ -168,7 +170,7 @@ namespace RetroSokoban
             OpenNotice(0);
         }
 
-        private void OpenNotice(int number)
+        public void OpenNotice(int number)
         {
             pnlNotice[number].SetActive(true);
         }
@@ -186,12 +188,17 @@ namespace RetroSokoban
         public void OnCloseNoticeClicked()
         {
             pnlNotice[pnlNoticeCount].SetActive(false);
-            pnlNoticeCount += 1;            
+            pnlNoticeCount += 1;
             //// pnlNotice 안에 있는 공지 다끔 => 적용이 안됨
             //for (int i = 0; i < pnlNoticeCount; i++)
             //{
             //    pnlNotice[i].SetActive(false);
             //}            
+        }
+
+        public void OnExitButtonClicked()
+        {
+            _gameManager.SetgameMode(GameMode.Exit);
         }
 
         // 소코반 게임내 버튼
@@ -205,7 +212,7 @@ namespace RetroSokoban
         }
 
         // 인게임 타이틀내 시작버튼 클릭
-        public void OnPlayClicked()
+        public void OnSokobanPlayClicked()
         {
             // 스테이지 초기화
             _skobanManager.GameReset();
@@ -229,6 +236,23 @@ namespace RetroSokoban
             }
         }
 
+        //소코반 다음스테이지 넥스트 버튼 클릭
+        public void OnNextStageClicked()
+        {
+            _skobanManager.ClickNextStageButton();
+        }
+
+        // 소코반 exit 버튼 클릭
+        public void OnExitSokoban()
+        {
+            pnlGameExit.SetActive(true);
+        }
+
+        public void OffExitSokoban()
+        {
+            // 까만화면 비활성
+            pnlGameExit.SetActive(false);
+        }
 
     }
 }
