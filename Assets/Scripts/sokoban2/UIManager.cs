@@ -135,13 +135,8 @@ namespace RetroSokoban
         // 배열에 넣은 하트 번호받아서 끄기
         public void HideHeart(int heartNumber)
         {
-            // 비활성만 한거라 파괴한게 아니어서 널이 될리 없음.... 다시 생각
-            if (hpHearts != null)
-            {
-                //hpHearts[heartNumber].SetActive(false);
-                Destroy(hpHearts[heartNumber]);
-            }
-            else Debug.LogWarning("하트가 없습니다");
+            //hpHearts[heartNumber].SetActive(false);
+            Destroy(hpHearts[heartNumber]);
         }
 
         // 타이틀 캔버스
@@ -164,7 +159,7 @@ namespace RetroSokoban
 
 
         ////////////// 버튼 관련 기능 //////////////
-        
+
         // 메인내 버튼
         // 레트로코반 시작 버튼
         public void OnStartRetrokobanClicked()
@@ -191,15 +186,14 @@ namespace RetroSokoban
         public void OnCloseNoticeClicked()
         {
             pnlNotice[pnlNoticeCount].SetActive(false);
-            pnlNoticeCount += 1;
-
+            pnlNoticeCount += 1;            
             //// pnlNotice 안에 있는 공지 다끔 => 적용이 안됨
             //for (int i = 0; i < pnlNoticeCount; i++)
             //{
             //    pnlNotice[i].SetActive(false);
             //}            
         }
-       
+
         // 소코반 게임내 버튼
         // 인게임 UI에서 뒤로가기 버튼을 클릭
         public void OnMenuClicked()
@@ -221,8 +215,8 @@ namespace RetroSokoban
 
         // 리플레이 버튼 클릭
         public void OnRePlayClicked()
-        {    
-            if(hpHearts != null)
+        {
+            if (hpHearts != null)
             {
                 // 하트차감, 스테이지 리셋, 타이머리셋
                 _skobanManager.StageReset();
