@@ -32,7 +32,8 @@ namespace RetroSokoban
                     print("카운트다운 종료");
 
                     // 타임오버로직
-                    _sokobanManager.TimeOver();
+                    //_sokobanManager.TimeOver();
+                    _sokobanManager.LoseSokoban();
                 }
                 // 시간계속 출력
                 UPdateTimerText();
@@ -58,6 +59,12 @@ namespace RetroSokoban
             int seconds = Mathf.FloorToInt(currentTime % 60);   //현재시간을 60으로 나눈 나머지
 
             _uiManager.SetCountDown(minutes, seconds);
+        }
+
+        // 카운트다운 멈추기
+        public void StopCountdown()
+        {
+            isCounting = false;
         }
     }
 }

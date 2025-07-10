@@ -8,75 +8,75 @@ namespace RetroSokoban
 {
     public class SokobanManager : MonoBehaviour
     {
-        //ºñ¾îÀÖ´Â Àå¼Ò¸¦ °¡¸®Å°´Â ½Äº°°ª
+        //ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Äºï¿½ï¿½ï¿½
         private const int Empty = 0;
-        //º®À» °¡¸®Å°´Â ½Äº° °ª
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Äºï¿½ ï¿½ï¿½
         private const int Wall = 1;
-        //¾ÆÀÌÅÛÀÌ µé¾î°¥ Àå¼Ò
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½
         private const int Goal = 2;
-        //ÀÌµ¿½ÃÅ³ ¹Ú½º
+        //ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½Ú½ï¿½
         private const int Box = 3;
-        //ÇÃ·¹ÀÌ¾îÀÇ ½Äº° °ª
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Äºï¿½ ï¿½ï¿½
         private const int Player = 4;
 
-        // ½ºÅ©¸³Æ® ¿¬°á
+        // ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         [SerializeField] private CountdownTimer _countdownTimer;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private HeartHealth _heartHealth;
 
-        /// ====== Ä«¸Þ¶ó °ü·Ã ======
-        // Ä«¸Þ¶ó
+        /// ====== Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ======
+        // Ä«ï¿½Þ¶ï¿½
         private Camera gameCamera;
-        // subÄ«¸Þ¶ó °ÔÀÓ¿ÀºêÁ§Æ®
+        // subÄ«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         private GameObject subCamera;
 
-        // Ä«¸Þ¶ó À§Ä¡ ¸®½ºÆ®
+        // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½Æ®
         [SerializeField]
         private List<Vector2> cameraPositions = new List<Vector2>();
 
-        /// ====== ÇÃ·¹ÀÌ¾î °ü·Ã ======
-        //ÇÃ·¹ÀÌ¾î
+        /// ====== ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ======
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½
         private Player player;
-        // ÇÃ·¹ÀÌ¾î À§Ä¡
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
         private Position playerPosition = new Position();
 
-        /// ====== µ¥ÀÌÅÍ °ü·Ã ======
-        //Á¦ÀÌ½¼ ÆÄÀÏ¿¡¼­ °¡Á®¿Ã ²¨ÀÓ
+        /// ====== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ======
+        //ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private int[,]? currentBoard = null;
         //private Slot[,] currentBoard = null;
 
-        // »ý¼ºµÈ ½ºÇÁ¶óÀÌÆ® ¸®½ºÆ®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
         private SpriteRenderer[,] sprites = null;
 
-        // Á¦ÀÌ½¼ ÆÄÀÏ¿¡¼­ ¹Þ¾Æ¿Ã Á¤º¸
+        // ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         private List<Sokoban_StageData> stages;
 
-        /// ====== ½ºÅ×ÀÌÁö °ü·Ã ======
-        //ÀüÃ¼ ½ºÅ×ÀÌÁö ¼ö
+        /// ====== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ======
+        //ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         private int totalStageCount = 0;
 
-        //ÇöÀç ½ºÅ×ÀÌÁö
-        private int currentStage = 1;
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        [SerializeField] private int currentStage = 1;
 
-        // ½ºÅ×ÀÌÁö ¿ÀºêÁ§Æ®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         private GameObject stageGameObject;
 
-        // ÇöÀç ½ºÅ×ÀÌÁöÀÇ ¾ÆÀÌÅÛÀ» ³ÖÀ» Àå¼Ò
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         private List<Position> goalPositions = new List<Position>(0);
 
-        // ÁöÁ¤ÇÑ ½ºÅ×ÀÌÁöÀÇ Çà°ú ¿­°ª
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private int width;
         private int height;
 
 
         private void Awake()
         {
-            // subCamera ÅÂ±×°ª ÁöÁ¤ÇØ¼­ Ã£¾Æ¿À±â
+            // subCamera ï¿½Â±×°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ Ã£ï¿½Æ¿ï¿½ï¿½ï¿½
             subCamera = GameObject.FindGameObjectWithTag("SubCamera");
             _heartHealth = FindAnyObjectByType<HeartHealth>(FindObjectsInactive.Include);
         }
 
-        // ½ºÅ©¸³Æ® °¡Á®¿À±â, °ÔÀÓ¸Å´ÏÀú¿¡¼­ ³ÖÀ½
+        // ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ó¸Å´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public void SetScripts(UIManager uiManager, CountdownTimer countdownTimer)
         {
             _uiManager = uiManager;
@@ -84,38 +84,38 @@ namespace RetroSokoban
         }
 
 
-        // ¼ÒÄÚ¹Ý ÃÊ±â¼¼ÆÃ
+        // ï¿½ï¿½ï¿½Ú¹ï¿½ ï¿½Ê±â¼¼ï¿½ï¿½
         public void InitializeSokoban()
         {
-            // ÀÌ°Ç ¼ÒÄÚ¹Ý ¸ðµå¿¡¼­???
+            // ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Ú¹ï¿½ ï¿½ï¿½å¿¡ï¿½ï¿½???
             if (subCamera != null) gameCamera = subCamera.GetComponent<Camera>();
 
-            // ÀüÃ¼ ½ºÅ×ÀÌÁö¸¦ ·Îµå
+            // ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
             stages = LoadJsonDate();
-            // ½ºÅ×ÀÌÁö µ¥ÀÌÅÍ ÇÒ´ç
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½
             SetStages(stages);
 
-            //ÇÏÆ® ÃÊ±âÈ­
+            //ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
             HeartReset();
 
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º(¹Ø¿¡ ÀÖ´Â°Å À§·Î ¿Ã¸²) ½ÃÀÛ¹öÆ° ´©¸£¸é ±¸¼ºÀ¸·Î º¯°æ
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ø¿ï¿½ ï¿½Ö´Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½) ï¿½ï¿½ï¿½Û¹ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             //Setupstage(currentStage - 1);
         }
 
-        // ¼ÒÄÚ¹Ý ½ÃÀÛ
+        // ï¿½ï¿½ï¿½Ú¹ï¿½ ï¿½ï¿½ï¿½ï¿½
         public void StartSokoban()
         {
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Setupstage(currentStage - 1);
         }
 
 
         /// <summary>
-        /// Json¿¡¼­ µ¥ÀÌÅÍ ·Îµå
+        /// Jsonï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         /// </summary>
         private List<Sokoban_StageData> LoadJsonDate()
         {
-            // È®ÀåÀÚ ¾øÀÌ ÆÄÀÏ ÀÌ¸§¸¸ ½áµµ µÊ jsonÆÄÀÏ °¡Á®¿À±â
+            // È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½áµµ ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             TextAsset asset = Resources.Load<TextAsset>("JsonFiles/Sokoban");
             stages = JsonConvert.DeserializeObject<List<Sokoban_StageData>>(asset.text);
 
@@ -123,7 +123,7 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// ½ºÅ×ÀÌÁö µ¥ÀÌÅÍ ÇÒ´çÇÏ±â (Á¦ÀÌ½¼¿¡¼­ ÀÐÀºÈÄ È£Ãâ)
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½Ï±ï¿½ (ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½)
         /// </summary>
         /// <param name="stages"></param>
         public void SetStages(List<Sokoban_StageData> stages)
@@ -133,95 +133,95 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// ½ºÅ×ÀÌÁöµé ¸¸µé±â
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="stage"></param>
         public void Setupstage(int stage)
         {
-            // ½ºÅ×ÀÌÁö »ý¼º
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             CreateStage(stage);
 
-            // ½ºÇÁ¶óÀÌÆ® ¼³Á¤
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
             SetSprits(stageGameObject);
 
-            // Ä«¸Þ¶ó À§Ä¡ ¼³Á¤
+            // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
             SetCameraPosition(stage);
 
-            // ÇöÀç º¸µå ¼³Á¤
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             SetCurrentBoard(stage);
 
-            // Goal À§Ä¡ ½ºÅ×ÀÌÁö¿¡¼­ ¾ÆÀÌÅÛÀ» ÀúÀåÇÒ °ø°£À» Ã£À½
+            // Goal ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
             FindGoalPositions();
 
-            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
             SetPlayerPosition();
 
-            // Ä«¿îÆ®´Ù¿î Àç½ÃÀÛ
+            // Ä«ï¿½ï¿½Æ®ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             CountdownReset();
         }
 
         /// <summary>
-        /// ½ºÅ×ÀÌÁö »ý¼º ÈÄ ½ºÇÁ¶óÀÌÆ® »ðÀÔ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="stage"></param>
         private void CreateStage(int stage)
         {
-            // ±âÁ¸ ½ºÅ×ÀÌÁö°¡ ³²¾ÆÀÖ´Ù¸é »èÁ¦
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (stageGameObject != null) Destroy(stageGameObject);
 
-            //ÇöÀç ½ºÅ×ÀÌÁö ÀÌ¸§À» ±¸ÇÔ
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             string stageText = $"Stage{stage + 1}";
-            // ¸®¼Ò½º¸¦ ·Îµå
+            // ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
             var stageObj = Resources.Load<GameObject>($"Prefabs/Stages/{stageText}");
             if (stageObj == null) return;
 
-            // ÁöÁ¤ÇÑ ½ºÅ×ÀÌÁöÀÇ Çà°ú ¿­ÀÇ °ªÀ» ¹ÞÀ½(¹è¿­ÀÇ Å©±â°ªÀ» ±¸ÇÏ°í)
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½è¿­ï¿½ï¿½ Å©ï¿½â°ªï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½)
             height = stages[stage].Map.GetLength(0);
             width = stages[stage].Map.GetLength(1);
-            // ½ºÇÁ¶óÀÌÆ® ¹è¿­À» »ý¼º
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             sprites = new SpriteRenderer[height, width];
 
-            // ½ºÅ×ÀÌÁö »ý¼º
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             stageGameObject = Instantiate(stageObj, Vector3.zero, Quaternion.identity);
         }
 
         /// <summary>
-        /// »ý¼ºµÈ ½ºÅ×ÀÌÁö¸¦ ¹Þ¾Æ¼­ ½ºÇÁ¶óÀÌÆ® »ðÀÔ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void SetSprits(GameObject stageGameObject)
         {
-            // ½ºÅ×ÀÌÁö ºÎ¸ð ¿ÀºêÁ§Æ®ÀÇ Æ®·£½ºÆû
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Transform rootTransform = stageGameObject.transform;
 
-            // rootTransform ¿ÀºêÁ§Æ® ¹Ø¿¡ ÀÖ´Â ½ºÅ×ÀÌÁöµé ¼ö¸¸Å­ ¹Ýº¹
+            // rootTransform ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ø¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å­ ï¿½Ýºï¿½
             for (int i = 0; i < rootTransform.childCount; i++)
             {
-                // À§¿¡¼­ºÎÅÍ ¼ø¼­´ë·Î child¿¡ ³ÖÀ½ 
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ childï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
                 Transform child = rootTransform.GetChild(i);
                 var rc = child.name.Split(",");
-                //  rc name ÀÔ·Â¹ÞÀ½
+                //  rc name ï¿½Ô·Â¹ï¿½ï¿½ï¿½
                 int.TryParse(rc[0], out int row);
                 int.TryParse(rc[1], out int column);
 
-                // ½ºÇÁ¶óÀÌÆ® ¹è¿­¿¡ ¿ä¼Ò¸¦ Ã¤¿ò(row,column À§Ä¡¿¡ °¢°¢ ½ºÇÁ¶óÀÌÆ® ³ÖÀ½)
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½Ò¸ï¿½ Ã¤ï¿½ï¿½(row,column ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½)
                 sprites[row, column] = child.GetComponent<SpriteRenderer>();
             }
         }
 
 
         /// <summary>
-        /// Ä«¸Þ¶ó À§Ä¡ ¼³Á¤
+        /// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void SetCameraPosition(int stage)
         {
-            // Ä«¸Þ¶ó°¡ ¾ø°í Ä«¸Þ¶ó Æ÷Áö¼ÇÀÇ ¼ö°¡ 0º¸´Ù Å©¸é
+            // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½
             if (gameCamera != null && cameraPositions.Count > 0)
             {
                 try
                 {
                     Vector3 position = cameraPositions[stage];
                     position.z = gameCamera.transform.position.z;
-                    // cameraPositions List¸¦ <Position>ÀÌ ¾Æ´Ñ <Vector2>·Î ÇØ³õÀ¸¸é »ç¿ë°¡´É
+                    // cameraPositions Listï¿½ï¿½ <Position>ï¿½ï¿½ ï¿½Æ´ï¿½ <Vector2>ï¿½ï¿½ ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ë°¡ï¿½ï¿½
                     gameCamera.transform.position = position;
                 }
                 catch( Exception e )
@@ -232,36 +232,36 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// currentBoard(ÇöÀç º¸µå) ¼³Á¤
+        /// currentBoard(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void SetCurrentBoard(int stage)
         {
-            //ÇöÀç º¸µå¿¡ ¹è¿­À» ÇÒ´ç
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å¿¡ ï¿½è¿­ï¿½ï¿½ ï¿½Ò´ï¿½
             currentBoard = new int[height, width];
 
-            //½ºÅ×ÀÌÁö µ¥ÀÌÅÍ¸¦ CurrtentBoard¿¡º¹»çÇÔ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ CurrtentBoardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Array.Copy(stages[stage].Map, currentBoard, currentBoard.Length);
         }
 
         /// <summary>
-        /// º¸µåÆÇ¿¡¼­ GoalÀÇ À§Ä¡Ã£¾Æ¼­ ¸®½ºÆ®¿¡ ÀúÀå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ Goalï¿½ï¿½ ï¿½ï¿½Ä¡Ã£ï¿½Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void FindGoalPositions()
         {
-            // ÀúÀå¼ÒÀÇ ³»¿ëÀ» »èÁ¦
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             goalPositions.Clear();
 
             if (currentBoard == null) return;
 
-            //º¸µåÆÇ ¼øÈ¸
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
             for (int r = 0; r < currentBoard.GetLength(0); r++)
             {
                 for (int c = 0; c < currentBoard.GetLength(1); c++)
                 {
                     if (currentBoard[r, c] == Goal)
                     {
-                        //¾ÆÀÌÅÛÀ» ³ÖÀ» ¼ö ÀÖ´Â °ø°£ÀÎ °æ¿ì À§Ä¡¸¦ ÀúÀå
-                        // ¸Þ¸ð¸®¸¦ ÇÒ´çÇÏ¸é¼­ ÀúÀå
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                        // ï¿½Þ¸ð¸®¸ï¿½ ï¿½Ò´ï¿½ï¿½Ï¸é¼­ ï¿½ï¿½ï¿½ï¿½
                         Position position = new Position { X = c, Y = r };
                         goalPositions.Add(position);
                     }
@@ -270,22 +270,22 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+        /// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void SetPlayerPosition()
         {
-            // Player ½ºÅ©¸³Æ® Ã£¾Æ¿À±â
+            // Player ï¿½ï¿½Å©ï¿½ï¿½Æ® Ã£ï¿½Æ¿ï¿½ï¿½ï¿½
             player = FindFirstObjectByType<Player>();
 
-            // Ä³¸¯ÅÍÀÇ À§Ä¡¸¦ Ã£À½
+            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ã£ï¿½ï¿½
             FindPlayerPosition();
 
-            // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
             player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y);
         }
 
         /// <summary>
-        /// 2Â÷¿ø ¹è¿­¿¡¼­ Ä³¸¯ÅÍÀÇ À§Ä¡¸¦ Ã£À½
+        /// 2ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ã£ï¿½ï¿½
         /// </summary>
         public void FindPlayerPosition()
         {
@@ -303,106 +303,106 @@ namespace RetroSokoban
             }
         }
 
-        // ÀÔ·Â Å° Á¶Á¤
+        // ï¿½Ô·ï¿½ Å° ï¿½ï¿½ï¿½ï¿½
         public void HandleInput(Direction direction)
         {
-            //ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ Ã£À½
+            //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ã£ï¿½ï¿½
             FindPlayerPosition();
 
-            //Å° ÀÔ·ÂÀ» ¹Þ¾Æ¼­ Ã³¸®ÇÏ´Â ³»¿ë
+            //Å° ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ Ã³ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
             InputMoveKey(direction);
 
-            // °ñÀÚ¸®°¡ ºñ¾îÀÖÀ¸¸é ´Ù½Ã ±×¸®±â
+            // ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
             IsGoalEmpty();
 
-            //°ÔÀÓÀÌ Å¬¸®¾î µÇ¾úÀ» ¶§ Ã³¸®
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
             ClearGame();
         }
 
-        // ÀÔ·Â Å° Á¶Á¤
+        // ï¿½Ô·ï¿½ Å° ï¿½ï¿½ï¿½ï¿½
         public void InputMoveKey(Direction direction)
         {
-            //ÀÔ·ÂµÈ Å°°ªÀ» ¹Þ¾Æ¿È
-            //Å° ÀÔ·ÂÀ» ¹Þ¾Æ¼­ Ã³¸®ÇÏ´Â ³»¿ë
+            //ï¿½Ô·Âµï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½
+            //Å° ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ Ã³ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
             switch (direction)
             {
-                // x-1 Ä³¸¯ÅÍÀÇ ¿ÞÂÊ                
+                // x-1 Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½                
                 case Direction.Left:
-                    // Ä³¸¯ÅÍÀÇ ¿ÞÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Goal ï¿½ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
                     if (currentBoard[playerPosition.Y, playerPosition.X - 1] == Empty ||
                         currentBoard[playerPosition.Y, playerPosition.X - 1] == Goal)
                     {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                        // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                        // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                         currentBoard[playerPosition.Y, playerPosition.X - 1] = Player;
 
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                        //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                         currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                         player.SetPosition(playerPosition.X - 1, (height - 1) - playerPosition.Y);
                     }
-                    //Ä³¸¯ÅÍÀÇ ¿ÞÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+                    //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
                     else if (currentBoard[playerPosition.Y, playerPosition.X - 1] == Box)
                     {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
+                        //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½)
                         if (currentBoard[playerPosition.Y, playerPosition.X - 2] == Empty ||
                             currentBoard[playerPosition.Y, playerPosition.X - 2] == Goal)
                         {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                            // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X - 2] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                            // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X - 1] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
+                            // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
 
-                            // Box Ã³¸®
+                            // Box Ã³ï¿½ï¿½
                             sprites[playerPosition.Y, playerPosition.X - 2] = sprites[playerPosition.Y, playerPosition.X - 1];
                             sprites[playerPosition.Y, playerPosition.X - 2].transform.position = new Vector3(playerPosition.X - 2, (height - 1) - playerPosition.Y);
                             sprites[playerPosition.Y, playerPosition.X - 1] = null;
 
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                             player.transform.position = new Vector3(playerPosition.X - 1, (height - 1) - playerPosition.Y);
                         }
                     }
                     break;
                 case Direction.Right:
-                    // Ä³¸¯ÅÍÀÇ ¿À¸¥ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Goal ï¿½ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
                     if (currentBoard[playerPosition.Y, playerPosition.X + 1] == Empty ||
                         currentBoard[playerPosition.Y, playerPosition.X + 1] == Goal)
                     {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                        // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                        // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                         currentBoard[playerPosition.Y, playerPosition.X + 1] = Player;
 
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                        //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                         currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                        // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                        // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½
+                        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                         player.SetPosition(playerPosition.X + 1, (height - 1) - playerPosition.Y);
 
                     }
-                    //Ä³¸¯ÅÍÀÇ ¿À¸¥ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+                    //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
                     else if (currentBoard[playerPosition.Y, playerPosition.X + 1] == Box)
                     {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
+                        //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½)
                         if (currentBoard[playerPosition.Y, playerPosition.X + 2] == Empty ||
                             currentBoard[playerPosition.Y, playerPosition.X + 2] == Goal)
                         {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                            // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X + 2] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                            // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X + 1] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
+                            // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
+                            // Box Ã³ï¿½ï¿½
                             sprites[playerPosition.Y, playerPosition.X + 2] =
                                  sprites[playerPosition.Y, playerPosition.X + 1];
                             sprites[playerPosition.Y, playerPosition.X + 2].transform.position =
@@ -410,44 +410,44 @@ namespace RetroSokoban
 
                             sprites[playerPosition.Y, playerPosition.X + 1] = null;
 
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                             player.transform.position = new Vector3(playerPosition.X + 1, (height - 1) - playerPosition.Y);
                         }
                     }
                     break;
                 case Direction.Up:
-                    // Ä³¸¯ÅÍÀÇ À§ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Goal ï¿½ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
                     if (currentBoard[playerPosition.Y - 1, playerPosition.X] == Empty ||
                         currentBoard[playerPosition.Y - 1, playerPosition.X] == Goal)
                     {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                        // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                        // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                         currentBoard[playerPosition.Y - 1, playerPosition.X] = Player;
 
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                        //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                         currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                         player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y + 1);
 
                     }
-                    //Ä³¸¯ÅÍÀÇ À§ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+                    //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
                     else if (currentBoard[playerPosition.Y - 1, playerPosition.X] == Box)
                     {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ À§ÀÇ À§ÀÚ¸®)
+                        //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½)
                         if (currentBoard[playerPosition.Y - 2, playerPosition.X] == Empty ||
                             currentBoard[playerPosition.Y - 2, playerPosition.X] == Goal)
                         {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ À§¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                            // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y - 2, playerPosition.X] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                            // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y - 1, playerPosition.X] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
+                            // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
+                            // Box Ã³ï¿½ï¿½
                             sprites[playerPosition.Y - 2, playerPosition.X] =
                                  sprites[playerPosition.Y - 1, playerPosition.X];
                             sprites[playerPosition.Y - 2, playerPosition.X].transform.position =
@@ -455,51 +455,51 @@ namespace RetroSokoban
 
                             sprites[playerPosition.Y - 1, playerPosition.X] = null;
 
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                             player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + 1);
 
                         }
                     }
                     break;
                 case Direction.Down:
-                    // Ä³¸¯ÅÍÀÇ ¾Æ·¡°¡ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Goal ï¿½ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
                     if (currentBoard[playerPosition.Y + 1, playerPosition.X] == Empty ||
                         currentBoard[playerPosition.Y + 1, playerPosition.X] == Goal)
                     {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                        // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                        // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                         currentBoard[playerPosition.Y + 1, playerPosition.X] = Player;
 
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                        //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                         currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                         player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y - 1);
 
                     }
-                    //Ä³¸¯ÅÍÀÇ ¾Æ·¡¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+                    //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
                     else if (currentBoard[playerPosition.Y + 1, playerPosition.X] == Box)
                     {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¾Æ·¡ÀÇ ¾Æ·¡ÀÚ¸®)
+                        //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½Ú¸ï¿½)
                         if (currentBoard[playerPosition.Y + 2, playerPosition.X] == Empty ||
                             currentBoard[playerPosition.Y + 2, playerPosition.X] == Goal)
                         {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¾Æ·¡¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                            // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y + 2, playerPosition.X] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                            // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                             currentBoard[playerPosition.Y + 1, playerPosition.X] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                            // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
+                            // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
+                            // Box Ã³ï¿½ï¿½
                             sprites[playerPosition.Y + 2, playerPosition.X] = sprites[playerPosition.Y + 1, playerPosition.X];
                             sprites[playerPosition.Y + 2, playerPosition.X].transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y - 2);
 
                             sprites[playerPosition.Y + 1, playerPosition.X] = null;
 
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                             player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y - 1);
                         }
                     }
@@ -509,11 +509,11 @@ namespace RetroSokoban
 
 
         /// <summary>
-        /// °ñ µé¾î°¬´Ù ³ª¿À¸é ´Ù½Ã ±×·ÁÁÖ±â
+        /// ï¿½ï¿½ ï¿½ï¿½î°¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½×·ï¿½ï¿½Ö±ï¿½
         /// </summary>
         public void IsGoalEmpty()
         {
-            // ½ºÅ×ÀÌÁö Ãß°¡ ¸ðµå¿¡¼­´Â ¼øÈ¸ÇÏ´Â ¹üÀ§µµ º¯°æµÇ¾î¾ß ÇÔ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½å¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½ï¿½
             for (int i = 0; i < goalPositions.Count; i++)
             {
                 int row = goalPositions[i].Y;
@@ -525,45 +525,67 @@ namespace RetroSokoban
             }
         }
 
-        // ½ºÅ×ÀÌÁö Å¬¸®¾î½Ã Ã³¸®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         public void ClearGame()
-        {
-            // °ñÀÌ ºñ¾îÀÖÁö ¾ÊÀ¸¸é true ¹ÝÈ¯ ½Ã
+        {            
+            // ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½È¯
             if (IsLevelCleared())
             {
+                //Ä«ï¿½ï¿½Æ®ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+                StopCountdown();
+
                 if (currentStage >= totalStageCount)
                 {
-                    // UI°¡ ³ª¿Í¾ß ÇÔ
-                    print("¸ðµç½ºÅ×ÀÌÁö¸¦ Å¬¸®¾î");
-                    print("°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù!");
+                    // Å¬ï¿½ï¿½ï¿½ï¿½ UI
+                    _uiManager.SetClearSokobanUI(true);
+
+                    print("ï¿½ï¿½ç½ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½");
+                    print("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½!");
                     return;
                 }
-                else // goalPositions ¾È¿¡ Box ÀÖÁö ¾ÊÀº°Ô ÀÖÀ¸¸é
+                else
                 {
-                    // UI°¡ ³ª¿Í¾ß ÇÔ
-                    print("´ÙÀ½ ½ºÅ×ÀÌÁö¸¦ ÇÃ·¹ÀÌ ÇÏ½Ã°Ú½À´Ï±î?");
-                    print("´ÙÀ½ ½ºÅ×ÀÌÁö·Î ÀÌµ¿ÇÏ·Á¸é yÅ°¸¦ ÀÔ·Â");
-                    //_uiManager.OpenInfoNextStage();                        
+                    // ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                    CheckAndShowClearUI();
 
-                    // To do...
-                    // ´ÙÀ½½ºÅ×ÀÌÁöÀÌµ¿Å°(R, A¹öÆ°) ÀÔ·Â¹Þ±â => ¹öÆ°Ã³¸®
-                    ClickNextStageButton();
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI
+                    print("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?");
+                    print("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï·ï¿½ï¿½ï¿½ yÅ°ï¿½ï¿½ ï¿½Ô·ï¿½");
                 }
             }
         }
 
+        //Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+        private void CheckAndShowClearUI()
+        {
+            // 2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            if (currentStage >= 2)
+            {
+                // Å¬ï¿½ï¿½ï¿½ï¿½ UI
+                _uiManager.SetClearSokobanUI(true);
+            }
+            else
+            {
+                //_uiManager.OpenInfoNextStage();
+                // To do...
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½Å°(R, Aï¿½ï¿½Æ°) ï¿½Ô·Â¹Þ±ï¿½ => ï¿½ï¿½Æ°Ã³ï¿½ï¿½
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+                ClickNextStageButton();
+            }
+        }
+
         /// <summary>
-        /// Goal¿¡ BoxÁ¸Àç À¯¹« È®ÀÎ
+        /// Goalï¿½ï¿½ Boxï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
-        // ¾ÆÀÌÅÛÀ» ÀúÀåÇÒ °ø°£À» ¼øÈ¸ÇÏ°í Box°¡ ¾øÀ¸¸é false
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï°ï¿½ Boxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ false
         private bool IsLevelCleared()
         {
             for (int i = 0; i < goalPositions.Count; i++)
             {
                 int row = goalPositions[i].Y;
                 int column = goalPositions[i].X;
-                // °ñ¿¡ box°¡ ¾øÀ¸¸é ³ÖÀ» ¼ö ÀÖ°Ô
+                // ï¿½ï¿½ boxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½
                 if (currentBoard[row, column] != Box)
                     return false;
             }
@@ -571,100 +593,100 @@ namespace RetroSokoban
         }
 
 
-        // ´ÙÀ½½ºÅ×ÀÌÁöÀÌµ¿Å°(R) ÀÔ·Â¹Þ±â => UI¸Å´ÏÀú·Î ¿Å±â±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½Å°(R) ï¿½Ô·Â¹Þ±ï¿½ => UIï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
         public void ClickNextStageButton()
         {
-            // vr¿¡¼± A¹öÆ°
+            // vrï¿½ï¿½ï¿½ï¿½ Aï¿½ï¿½Æ°
 
-            // ´©¸¦¶§ Ã³¸®
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
             ++currentStage;
             Setupstage(currentStage - 1);
         }
 
-        // ¼ÒÄÚ¹Ý ½ºÅ×ÀÌÁö ³» ÀÌµ¿Ã³¸®
+        // ï¿½ï¿½ï¿½Ú¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
         /// <summary>
-        /// ÁÂ,¿ì ÀÌµ¿Ã³¸®
+        /// ï¿½ï¿½,ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
         /// </summary>
         public void MoveHorizontal(int moveNumber1, int moveNumber2)
         {
             if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Empty ||
                         currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Goal)
             {
-                // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                 currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] = Player;
 
-                //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                 currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                 player.SetPosition(playerPosition.X + moveNumber1, (height - 1) - playerPosition.Y);
             }
-            //Ä³¸¯ÅÍÀÇ ¿ÞÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+            //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
             else if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Box)
             {
-                //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
+                //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½)
                 if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] == Empty ||
                     currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] == Goal)
                 {
-                    // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                    // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                    // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                     currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] = Box;
-                    // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                    // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                     currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] = Player;
-                    // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                    // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
+                    // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
 
-                    // Box Ã³¸®
+                    // Box Ã³ï¿½ï¿½
                     sprites[playerPosition.Y, playerPosition.X + moveNumber2] = sprites[playerPosition.Y, playerPosition.X + moveNumber1];
                     sprites[playerPosition.Y, playerPosition.X + moveNumber2].transform.position = new Vector3(playerPosition.X + moveNumber2, (height - 1) - playerPosition.Y);
                     sprites[playerPosition.Y, playerPosition.X + moveNumber1] = null;
 
-                    // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                     player.transform.position = new Vector3(playerPosition.X + moveNumber1, (height - 1) - playerPosition.Y);
                 }
             }
         }
 
         /// <summary>
-        /// À§, ¾Æ·¡ ÀÌµ¿Ã³¸®
+        /// ï¿½ï¿½, ï¿½Æ·ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
         /// </summary>
         public void MoveVertical(int moveNumber1, int moveNumber2)
         {
-            // Ä³¸¯ÅÍÀÇ À§ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
+            // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Goal ï¿½ï¿½ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½
             if (currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Empty ||
                 currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Goal)
             {
-                // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
+                // ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ ï¿½ï¿½
+                // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½
                 currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] = Player;
 
-                //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
+                //Ä³ï¿½ï¿½ï¿½Í°ï¿½ï¿½Ö´ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Äºï¿½ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½
                 currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
+                // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
                 player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y + moveNumber1);
 
             }
-            //Ä³¸¯ÅÍÀÇ À§ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
+            //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ Ã³ï¿½ï¿½
             else if (currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Box)
             {
-                //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ À§ÀÇ À§ÀÚ¸®)
+                //ï¿½Ú½ï¿½ï¿½ï¿½ -2 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½)
                 if (currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] == Empty ||
                     currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] == Goal)
                 {
-                    // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                    // Ä³¸¯ÅÍÀÇ À§¿¡ ¹Ú½º¸¦ ¿Å±â°í
+                    // Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å³ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½
                     currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] = Box;
-                    // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
+                    // ï¿½Ú½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Å±ï¿½ï¿½
                     currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] = Player;
-                    // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
+                    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     currentBoard[playerPosition.Y, playerPosition.X] = Empty;
 
-                    // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                    // Box Ã³¸®
+                    // Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½(2Ä­Â¥ï¿½ï¿½)
+                    // Box Ã³ï¿½ï¿½
                     sprites[playerPosition.Y + moveNumber2, playerPosition.X] =
                          sprites[playerPosition.Y + moveNumber1, playerPosition.X];
                     sprites[playerPosition.Y + moveNumber2, playerPosition.X].transform.position =
@@ -672,63 +694,90 @@ namespace RetroSokoban
 
                     sprites[playerPosition.Y + moveNumber1, playerPosition.X] = null;
 
-                    // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+                    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                     player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + moveNumber1);
                 }
             }
         }
 
         /// <summary>
-        /// °ÔÀÓ ¸®¼Â
+        /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void GameReset()
         {
-            // ÇöÀç ½ºÅ×ÀÌÁö ¹øÈ£
+            //ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
+            HeartReset();
+
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
             currentStage = 1;
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Setupstage(currentStage - 1);
         }
 
-        //Ä«¿îÆ® ´Ù¿î ·ÎÁ÷
-        // °ÔÀÓ¿À¹ö·ÎÁ÷
+        //Ä«ï¿½ï¿½Æ® ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         public void TimeOver()
         {
-            // Å¸ÀÓ¿À¹ö UI È°¼º
-            _uiManager.SetTimeOverActive();
+            // Å¸ï¿½Ó¿ï¿½ï¿½ï¿½ UI È°ï¿½ï¿½
+            _uiManager.SetTimeOverUI(true);
+        }
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Å¸ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½) Å¸ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½
+        public void LoseSokoban()
+        {
+            int heartCount = _heartHealth.GetHeartCount();
+            if (heartCount <= 0)
+            {
+                // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ Ã¢
+                _uiManager.SetGameOverUI(true);
+            }
+            else
+            {   // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¢
+                _uiManager.SetTimeOverUI(true);
+            }
         }
 
         private void HeartReset()
         {
-            // ÇÏÆ®°¹¼ö ÃÊ±âÈ­
+            // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             _heartHealth.SetHeartCount();
+
+            //ï¿½ï¿½Æ® È°ï¿½ï¿½
+            _uiManager.ShowAllHeart();
         }
 
         private void DeHeart()
         {
             var heartCount = _heartHealth.CalculateHeartCount();
-            // ÇÏÆ® ºñÈ°¼º
+            // ï¿½ï¿½Æ® ï¿½ï¿½È°ï¿½ï¿½
             _uiManager.HideHeart(heartCount);
         }
 
-        // Ä«¿îÆ®´Ù¿î Àç½ÃÀÛ
+        // Ä«ï¿½ï¿½Æ®ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         public void CountdownReset()
         {
             _countdownTimer.CountdownInitialized();
         }
 
+        public void StopCountdown()
+        {
+            //Ä«ï¿½ï¿½Æ®ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ß±ï¿½
+            _countdownTimer.StopCountdown();
+        }
 
-        //ÇöÀç½ºÅ×ÀÌÁö ¸®ÇÃ·¹ÀÌ(¸®ÇÃ·¹ÀÌ ¹öÆ° Å¬¸¯)
+
+        //ï¿½ï¿½ï¿½ç½ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½)
         public void StageReset()
         {
-            //ÇÏÆ®Â÷°¨
+            //ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
             DeHeart();
 
-            // ÇöÀç ½ºÅ×ÀÌÁö ¹øÈ£
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
             // currentStage = currentStage
 
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Setupstage(currentStage - 1);
         }
 
-    } // ¼ÒÄÚ¹Ý ¸Å´ÏÀú Å¬·¡½º
+    } // ï¿½ï¿½ï¿½Ú¹ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 }

@@ -1527,7 +1527,7 @@
                 {
                     "name": "TriggerButton",
                     "type": "Button",
-                    "id": "8f57b487-aa0e-4f6b-ab2e-165de106da5a",
+                    "id": "1097ff0f-3e0e-41a9-9c6f-5c1be71b8657",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1944,7 +1944,7 @@
                 },
                 {
                     "name": "",
-                    "id": "a524f766-a3ba-4ae2-b6ad-3b31142e0570",
+                    "id": "29054112-7fbe-4152-884a-fd517e06a18f",
                     "path": "<XRController>{RightHand}/triggerButton",
                     "interactions": "",
                     "processors": "",
