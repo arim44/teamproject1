@@ -42,14 +42,14 @@ public class MaterialChanger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if( Input.GetKeyDown(KeyCode.A ))
-        {
-            FadeIn();
-        }
+        //if( Input.GetKeyDown(KeyCode.A ))
+        //{
+        //    FadeIn();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            FadeOut();
-        }
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    FadeOut();
+        //}
     }
 }

@@ -59,5 +59,11 @@ namespace RetroSokoban
 
             _uiManager.SetCountDown(minutes, seconds);
         }
+
+        // 카운트다운 멈추기
+        public void StopCountdown()
+        {
+            isCounting = false;
+        }
     }
 }

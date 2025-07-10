@@ -524,23 +524,28 @@ namespace RetroSokoban
             // 골이 비어있지 않으면 true 반환 시
             if (IsLevelCleared())
             {
+                //카운트다운 멈추기
+                StopCountdown();
+
                 if (currentStage >= totalStageCount)
                 {
-                    // UI가 나와야 함
+                    // 클리어 UI
+                    _uiManager.OpenClearSokoban();
+
                     print("모든스테이지를 클리어");
                     print("게임을 종료합니다!");
                     return;
                 }
                 else // goalPositions 안에 Box 있지 않은게 있으면
                 {
-                    // UI가 나와야 함
+                    // 다음스테이지 UI
                     print("다음 스테이지를 플레이 하시겠습니까?");
                     print("다음 스테이지로 이동하려면 y키를 입력");
-                    _uiManager.OpenInfoNextStage();                        
+                    //_uiManager.OpenInfoNextStage();                        
 
                     // To do...
                     // 다음스테이지이동키(R, A버튼) 입력받기 => 버튼처리
-                    //ClickNextStageButton();
+                    ClickNextStageButton();
                 }
             }
         }
@@ -676,6 +681,9 @@ namespace RetroSokoban
         /// </summary>
         public void GameReset()
         {
+            //하트 초기화
+            HeartReset();
+
             // 현재 스테이지 번호
             currentStage = 1;
             // 현재 스테이지를 구성
@@ -694,6 +702,9 @@ namespace RetroSokoban
         {
             // 하트갯수 초기화
             _heartHealth.SetHeartCount();
+
+            //하트 활성
+            _uiManager.ShowAllHeart();
         }
 
         private void DeHeart()
@@ -707,6 +718,12 @@ namespace RetroSokoban
         public void CountdownReset()
         {
             _countdownTimer.CountdownInitialized();
+        }
+
+        public void StopCountdown()
+        {
+            //카운트다운 멈추기
+            _countdownTimer.StopCountdown();
         }
 
 

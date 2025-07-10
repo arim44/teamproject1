@@ -132,8 +132,16 @@ namespace RetroSokoban
         // 배열에 넣은 하트 번호받아서 끄기
         public void HideHeart(int heartNumber)
         {
-            //hpHearts[heartNumber].SetActive(false);
-            Destroy(hpHearts[heartNumber]);
+            hpHearts[heartNumber].SetActive(false);
+            //Destroy(hpHearts[heartNumber]);
+        }
+
+        public void ShowAllHeart()
+        {
+            for(int i = 0; i < hpHearts.Length; i++)
+            {
+                hpHearts[i].SetActive(true);
+            }
         }
 
         // 타이틀 캔버스
@@ -157,6 +165,12 @@ namespace RetroSokoban
         public void OpenInfoNextStage()
         {
             pnlInfoNextStage.SetActive(true);
+        }
+
+        // 게임 클리어시 UI켜시
+        public void OpenClearSokoban()
+        {
+            pnlGameClear.SetActive(true);
         }
 
 
@@ -207,8 +221,13 @@ namespace RetroSokoban
         {
             // 타이틀캔버스 활성
             titleCanvas?.SetActive(true);
+            
             // 스테이지 초기화
-            _skobanManager.GameReset();
+            //_skobanManager.GameReset();
+
+            //만약 메뉴버튼 갈때는 초기화 하지 않으면
+            // 카운트다운 멈춤
+            _skobanManager.StopCountdown();
         }
 
         // 인게임 타이틀내 시작버튼 클릭
@@ -223,7 +242,8 @@ namespace RetroSokoban
         // 리플레이 버튼 클릭
         public void OnRePlayClicked()
         {
-            if (hpHearts != null)
+            // 활성된 하트가 있으면 길이는 계속 있으니까 활성으로 바꿔야 함
+            if (hpHearts.Length > 0)
             {
                 // 하트차감, 스테이지 리셋, 타이머리셋
                 _skobanManager.StageReset();
@@ -233,6 +253,18 @@ namespace RetroSokoban
             {
                 // 하트배열에 게임오버화면
                 pnlGameOver.SetActive(true);
+            }
+        }
+
+        //하트배열 하트헬스에서 해야겠음
+        private void CheckActiveHeartCount()
+        {
+            // 활성 상태인 하트 수 확인
+            int activeHearts = 0;
+            foreach(var heart in hpHearts)
+            {
+                if(heart.activeSelf)
+                    activeHearts++;
             }
         }
 
