@@ -25,7 +25,7 @@ public class EditorStages : MonoBehaviour
     private SpriteRenderer Player;
 
     //스테이지
-    private int stage = 2;
+    private int stage = 9;
 
 
     private void Reset()

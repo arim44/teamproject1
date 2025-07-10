@@ -217,10 +217,17 @@ namespace RetroSokoban
             // 카메라가 없고 카메라 포지션의 수가 0보다 크면
             if (gameCamera != null && cameraPositions.Count > 0)
             {
-                Vector3 position = cameraPositions[stage];
-                position.z = gameCamera.transform.position.z;
-                // cameraPositions List를 <Position>이 아닌 <Vector2>로 해놓으면 사용가능
-                gameCamera.transform.position = position;
+                try
+                {
+                    Vector3 position = cameraPositions[stage];
+                    position.z = gameCamera.transform.position.z;
+                    // cameraPositions List를 <Position>이 아닌 <Vector2>로 해놓으면 사용가능
+                    gameCamera.transform.position = position;
+                }
+                catch( Exception e )
+                {
+                    print(e);
+                }
             }
         }
 
