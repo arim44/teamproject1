@@ -56,7 +56,7 @@ namespace RetroSokoban
         private int totalStageCount = 0;
 
         //현재 스테이지
-        private int currentStage = 1;
+        [SerializeField] private int currentStage = 1;
 
         // 스테이지 오브젝트
         private GameObject stageGameObject;
@@ -520,33 +520,50 @@ namespace RetroSokoban
 
         // 스테이지 클리어시 처리
         public void ClearGame()
-        {
-            // 골이 비어있지 않으면 true 반환 시
+        {            
+            // 모든 골에 박스로 채워졌는지 검사 다 채워지면 true반환
             if (IsLevelCleared())
             {
-                //카운트다운 멈추기
+                //카운트다운 정지
                 StopCountdown();
 
                 if (currentStage >= totalStageCount)
                 {
                     // 클리어 UI
-                    _uiManager.OpenClearSokoban();
+                    _uiManager.SetClearSokobanUI(true);
 
                     print("모든스테이지를 클리어");
                     print("게임을 종료합니다!");
                     return;
                 }
-                else // goalPositions 안에 Box 있지 않은게 있으면
+                else
                 {
+                    // 조건 체크 후 클리어화면 또는 다음스테이지 진행
+                    CheckAndShowClearUI();
+
                     // 다음스테이지 UI
                     print("다음 스테이지를 플레이 하시겠습니까?");
                     print("다음 스테이지로 이동하려면 y키를 입력");
-                    //_uiManager.OpenInfoNextStage();                        
-
-                    // To do...
-                    // 다음스테이지이동키(R, A버튼) 입력받기 => 버튼처리
-                    ClickNextStageButton();
                 }
+            }
+        }
+
+        //클리어 조건 함수
+        private void CheckAndShowClearUI()
+        {
+            // 2스테이지 클리어 시
+            if (currentStage >= 2)
+            {
+                // 클리어 UI
+                _uiManager.SetClearSokobanUI(true);
+            }
+            else
+            {
+                //_uiManager.OpenInfoNextStage();
+                // To do...
+                // 다음스테이지이동키(R, A버튼) 입력받기 => 버튼처리
+                // 다음 스테이지 이동
+                ClickNextStageButton();
             }
         }
 
@@ -695,7 +712,22 @@ namespace RetroSokoban
         public void TimeOver()
         {
             // 타임오버 UI 활성
-            _uiManager.SetTimeOverActive();
+            _uiManager.SetTimeOverUI(true);
+        }
+
+        // 졌을때(타임오버시) 타임오버 또는 게임오버 창 띄우기
+        public void LoseSokoban()
+        {
+            int heartCount = _heartHealth.GetHeartCount();
+            if (heartCount <= 0)
+            {
+                // 하트개수가 0이면 게임오버 창
+                _uiManager.SetGameOverUI(true);
+            }
+            else
+            {   // 하트가 있으면 타임 오버 창
+                _uiManager.SetTimeOverUI(true);
+            }
         }
 
         private void HeartReset()

@@ -24,11 +24,12 @@ namespace RetroSokoban
 
         [Header("Sokoban")]
         // 소코반내 카운트 다운, 하트이미지, 시작버튼
-        [SerializeField] private TitleCanvas titleCanvas;   //타이틀 캔버스
+        [SerializeField] private TitleCanvas titleCanvas;  //타이틀 캔버스
         [SerializeField] private TMP_Text txtCountDown;     //소코반내 카운트다운 텍스트
         [SerializeField] private GameObject[] hpHearts;     // 하트
 
-        //타임오버 화면, 게임오버 화면, 클리어 화면, 종료화면(검정)
+        //타이틀 화면, 타임오버 화면, 게임오버 화면, 클리어 화면, 종료화면(검정)
+        //[SerializeField] private GameObject titleUI;        //타이틀 UI
         [SerializeField] private GameObject pnlTimeOver;    //타임오버 화면
         [SerializeField] private GameObject pnlGameOver;    //게임오버 화면
         [SerializeField] private GameObject pnlInfoNextStage;    //게임오버 화면
@@ -157,20 +158,36 @@ namespace RetroSokoban
         }
 
         //타임오버시ui 켜기
-        public void SetTimeOverActive()
+        public void SetTimeOverUI(bool active)
         {
-            pnlTimeOver.SetActive(true);
+            pnlTimeOver.SetActive(active);
         }
 
-        public void OpenInfoNextStage()
+        public void SetInfoNextStageUI(bool active)
         {
-            pnlInfoNextStage.SetActive(true);
+            pnlInfoNextStage.SetActive(active);
         }
 
         // 게임 클리어시 UI켜시
-        public void OpenClearSokoban()
+        public void SetClearSokobanUI(bool active)
         {
-            pnlGameClear.SetActive(true);
+            pnlGameClear.SetActive(active);
+        }
+
+        //게임오버시 ui 
+        public void SetGameOverUI(bool active)
+        {
+            pnlGameOver.SetActive(active);
+        }
+
+        //소코반 게임 내 UI화면 다 끄기
+        private void CloseAllSokobanUI()
+        {
+            pnlTimeOver.SetActive(false);
+            pnlGameOver.SetActive(false);
+            pnlGameClear.SetActive(false);
+            pnlInfoNextStage.SetActive(false);
+            pnlGameExit.SetActive(false);
         }
 
 
@@ -228,6 +245,9 @@ namespace RetroSokoban
             //만약 메뉴버튼 갈때는 초기화 하지 않으면
             // 카운트다운 멈춤
             _skobanManager.StopCountdown();
+
+            //열려있는 ui 끄기
+            CloseAllSokobanUI();
         }
 
         // 인게임 타이틀내 시작버튼 클릭
@@ -242,8 +262,10 @@ namespace RetroSokoban
         // 리플레이 버튼 클릭
         public void OnRePlayClicked()
         {
+            int activeHeartCount = CheckActiveHeartCount();
+
             // 활성된 하트가 있으면 길이는 계속 있으니까 활성으로 바꿔야 함
-            if (hpHearts.Length > 0)
+            if (activeHeartCount > 0)
             {
                 // 하트차감, 스테이지 리셋, 타이머리셋
                 _skobanManager.StageReset();
@@ -251,13 +273,13 @@ namespace RetroSokoban
             }
             else
             {
-                // 하트배열에 게임오버화면
+                // 하트배열에 활성된 하트 없으면 게임오버화면
                 pnlGameOver.SetActive(true);
             }
         }
 
         //하트배열 하트헬스에서 해야겠음
-        private void CheckActiveHeartCount()
+        private int CheckActiveHeartCount()
         {
             // 활성 상태인 하트 수 확인
             int activeHearts = 0;
@@ -266,6 +288,7 @@ namespace RetroSokoban
                 if(heart.activeSelf)
                     activeHearts++;
             }
+            return activeHearts;
         }
 
         //소코반 다음스테이지 넥스트 버튼 클릭

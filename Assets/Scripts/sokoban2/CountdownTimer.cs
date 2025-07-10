@@ -32,7 +32,8 @@ namespace RetroSokoban
                     print("카운트다운 종료");
 
                     // 타임오버로직
-                    _sokobanManager.TimeOver();
+                    //_sokobanManager.TimeOver();
+                    _sokobanManager.LoseSokoban();
                 }
                 // 시간계속 출력
                 UPdateTimerText();
