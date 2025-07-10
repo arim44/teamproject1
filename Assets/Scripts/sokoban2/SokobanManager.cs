@@ -543,11 +543,11 @@ namespace RetroSokoban
                     // UI가 나와야 함
                     print("다음 스테이지를 플레이 하시겠습니까?");
                     print("다음 스테이지로 이동하려면 y키를 입력");
-                    _uiManager.OpenInfoNextStage();                        
+                    //_uiManager.OpenInfoNextStage();                        
 
                     // To do...
                     // 다음스테이지이동키(R, A버튼) 입력받기 => 버튼처리
-                    //ClickNextStageButton();
+                    ClickNextStageButton();
                 }
             }
         }
