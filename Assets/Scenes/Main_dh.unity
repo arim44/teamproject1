@@ -10284,8 +10284,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushSound: {fileID: 8300000, guid: 256524ff36995da4f9c21eb176becea6, type: 3}
-  successSound: {fileID: 8300000, guid: 54a77032b5bafb64d9498e2509145129, type: 3}
+  successSound: {fileID: 8300000, guid: e3a3b4d89c274354d866a525ddb41723, type: 3}
   gameOverSound: {fileID: 8300000, guid: d19eb9453b7a09542b5343f931e9ce9c, type: 3}
+  moveSound: {fileID: 8300000, guid: b53e7cd574e14754690c7204e720dbbb, type: 3}
+  stageProgressSound: {fileID: 8300000, guid: 54a77032b5bafb64d9498e2509145129, type: 3}
 --- !u!4 &2004922978 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3197060374522437581, guid: 56707694c53037942b3d83b823992451, type: 3}
@@ -90953,10 +90955,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1890013573}
+  - {fileID: 1996267871}
   - {fileID: 2088291756}
   - {fileID: 1289419246}
   - {fileID: 1510770096}
   - {fileID: 6111286855969322914}
   - {fileID: 492628632}
   - {fileID: 2137901167}
-  - {fileID: 1996267871}

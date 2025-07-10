@@ -8,6 +8,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip successSound;
     public AudioClip gameOverSound;
 
+    // 새로 추가된 사운드
+    public AudioClip moveSound;
+    public AudioClip stageProgressSound;
+
     private AudioSource audioSource;
 
     void Awake()
@@ -31,10 +35,22 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(AudioClip clip)
     {
-        audioSource.PlayOneShot(clip);
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            Debug.LogWarning("사운드 클립이 비어 있습니다!");
+        }
     }
 
+    // 기존 사운드
     public void PlayPush() => PlaySound(pushSound);
     public void PlaySuccess() => PlaySound(successSound);
     public void PlayGameOver() => PlaySound(gameOverSound);
+
+    // 새 사운드
+    public void PlayMove() => PlaySound(moveSound);
+    public void PlayStageProgress() => PlaySound(stageProgressSound);
 }

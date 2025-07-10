@@ -1,260 +1,147 @@
+ï»¿// ì´ íŒŒì¼ì€ SoundManagerë¥¼ í™œìš©í•´ ì†Œì½”ë°˜ ê²Œì„ì—ì„œ ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•˜ë„ë¡ ìˆ˜ì •ëœ SokobanManager ìŠ¤í¬ë¦½íŠ¸ì…ë‹ˆë‹¤.
+
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace RetroSokoban
 {
     public class SokobanManager : MonoBehaviour
     {
-        //ºñ¾îÀÖ´Â Àå¼Ò¸¦ °¡¸®Å°´Â ½Äº°°ª
         private const int Empty = 0;
-        //º®À» °¡¸®Å°´Â ½Äº° °ª
         private const int Wall = 1;
-        //¾ÆÀÌÅÛÀÌ µé¾î°¥ Àå¼Ò
         private const int Goal = 2;
-        //ÀÌµ¿½ÃÅ³ ¹Ú½º
         private const int Box = 3;
-        //ÇÃ·¹ÀÌ¾îÀÇ ½Äº° °ª
         private const int Player = 4;
 
-        // ½ºÅ©¸³Æ® ¿¬°á
         [SerializeField] private CountdownTimer _countdownTimer;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private HeartHealth _heartHealth;
 
-        /// ====== Ä«¸Ş¶ó °ü·Ã ======
-        // Ä«¸Ş¶ó
         private Camera gameCamera;
-        // subÄ«¸Ş¶ó °ÔÀÓ¿ÀºêÁ§Æ®
         private GameObject subCamera;
 
-        // Ä«¸Ş¶ó À§Ä¡ ¸®½ºÆ®
-        [SerializeField]
-        private List<Vector2> cameraPositions = new List<Vector2>();
+        [SerializeField] private List<Vector2> cameraPositions = new List<Vector2>();
 
-        /// ====== ÇÃ·¹ÀÌ¾î °ü·Ã ======
-        //ÇÃ·¹ÀÌ¾î
         private Player player;
-        // ÇÃ·¹ÀÌ¾î À§Ä¡
         private Position playerPosition = new Position();
 
-        /// ====== µ¥ÀÌÅÍ °ü·Ã ======
-        //Á¦ÀÌ½¼ ÆÄÀÏ¿¡¼­ °¡Á®¿Ã ²¨ÀÓ
         private int[,]? currentBoard = null;
-        //private Slot[,] currentBoard = null;
-
-        // »ı¼ºµÈ ½ºÇÁ¶óÀÌÆ® ¸®½ºÆ®
         private SpriteRenderer[,] sprites = null;
-
-        // Á¦ÀÌ½¼ ÆÄÀÏ¿¡¼­ ¹Ş¾Æ¿Ã Á¤º¸
         private List<Sokoban_StageData> stages;
 
-        /// ====== ½ºÅ×ÀÌÁö °ü·Ã ======
-        //ÀüÃ¼ ½ºÅ×ÀÌÁö ¼ö
         private int totalStageCount = 0;
-
-        //ÇöÀç ½ºÅ×ÀÌÁö
         private int currentStage = 1;
-
-        // ½ºÅ×ÀÌÁö ¿ÀºêÁ§Æ®
         private GameObject stageGameObject;
-
-        // ÇöÀç ½ºÅ×ÀÌÁöÀÇ ¾ÆÀÌÅÛÀ» ³ÖÀ» Àå¼Ò
         private List<Position> goalPositions = new List<Position>(0);
-
-        // ÁöÁ¤ÇÑ ½ºÅ×ÀÌÁöÀÇ Çà°ú ¿­°ª
         private int width;
         private int height;
 
-
         private void Awake()
         {
-            // subCamera ÅÂ±×°ª ÁöÁ¤ÇØ¼­ Ã£¾Æ¿À±â
             subCamera = GameObject.FindGameObjectWithTag("SubCamera");
             _heartHealth = FindAnyObjectByType<HeartHealth>(FindObjectsInactive.Include);
         }
 
-        // ½ºÅ©¸³Æ® °¡Á®¿À±â, °ÔÀÓ¸Å´ÏÀú¿¡¼­ ³ÖÀ½
         public void SetScripts(UIManager uiManager, CountdownTimer countdownTimer)
         {
             _uiManager = uiManager;
             _countdownTimer = countdownTimer;
         }
 
-
-        // ¼ÒÄÚ¹İ ÃÊ±â¼¼ÆÃ
         public void InitializeSokoban()
         {
-            // ÀÌ°Ç ¼ÒÄÚ¹İ ¸ğµå¿¡¼­???
             if (subCamera != null) gameCamera = subCamera.GetComponent<Camera>();
-
-            // ÀüÃ¼ ½ºÅ×ÀÌÁö¸¦ ·Îµå
             stages = LoadJsonDate();
-            // ½ºÅ×ÀÌÁö µ¥ÀÌÅÍ ÇÒ´ç
             SetStages(stages);
-
-            //ÇÏÆ® ÃÊ±âÈ­
             HeartReset();
-
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º(¹Ø¿¡ ÀÖ´Â°Å À§·Î ¿Ã¸²) ½ÃÀÛ¹öÆ° ´©¸£¸é ±¸¼ºÀ¸·Î º¯°æ
-            //Setupstage(currentStage - 1);
         }
 
-        // ¼ÒÄÚ¹İ ½ÃÀÛ
         public void StartSokoban()
         {
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
             Setupstage(currentStage - 1);
         }
 
-
-        /// <summary>
-        /// Json¿¡¼­ µ¥ÀÌÅÍ ·Îµå
-        /// </summary>
         private List<Sokoban_StageData> LoadJsonDate()
         {
-            // È®ÀåÀÚ ¾øÀÌ ÆÄÀÏ ÀÌ¸§¸¸ ½áµµ µÊ jsonÆÄÀÏ °¡Á®¿À±â
             TextAsset asset = Resources.Load<TextAsset>("JsonFiles/Sokoban");
             stages = JsonConvert.DeserializeObject<List<Sokoban_StageData>>(asset.text);
-
             return stages;
         }
 
-        /// <summary>
-        /// ½ºÅ×ÀÌÁö µ¥ÀÌÅÍ ÇÒ´çÇÏ±â (Á¦ÀÌ½¼¿¡¼­ ÀĞÀºÈÄ È£Ãâ)
-        /// </summary>
-        /// <param name="stages"></param>
         public void SetStages(List<Sokoban_StageData> stages)
         {
             this.stages = stages;
             totalStageCount = stages.Count;
         }
 
-        /// <summary>
-        /// ½ºÅ×ÀÌÁöµé ¸¸µé±â
-        /// </summary>
-        /// <param name="stage"></param>
         public void Setupstage(int stage)
         {
-            // ½ºÅ×ÀÌÁö »ı¼º
             CreateStage(stage);
-
-            // ½ºÇÁ¶óÀÌÆ® ¼³Á¤
             SetSprits(stageGameObject);
-
-            // Ä«¸Ş¶ó À§Ä¡ ¼³Á¤
             SetCameraPosition(stage);
-
-            // ÇöÀç º¸µå ¼³Á¤
             SetCurrentBoard(stage);
-
-            // Goal À§Ä¡ ½ºÅ×ÀÌÁö¿¡¼­ ¾ÆÀÌÅÛÀ» ÀúÀåÇÒ °ø°£À» Ã£À½
             FindGoalPositions();
-
-            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
             SetPlayerPosition();
-
-            // Ä«¿îÆ®´Ù¿î Àç½ÃÀÛ
             CountdownReset();
         }
 
-        /// <summary>
-        /// ½ºÅ×ÀÌÁö »ı¼º ÈÄ ½ºÇÁ¶óÀÌÆ® »ğÀÔ
-        /// </summary>
-        /// <param name="stage"></param>
         private void CreateStage(int stage)
         {
-            // ±âÁ¸ ½ºÅ×ÀÌÁö°¡ ³²¾ÆÀÖ´Ù¸é »èÁ¦
             if (stageGameObject != null) Destroy(stageGameObject);
 
-            //ÇöÀç ½ºÅ×ÀÌÁö ÀÌ¸§À» ±¸ÇÔ
             string stageText = $"Stage{stage + 1}";
-            // ¸®¼Ò½º¸¦ ·Îµå
             var stageObj = Resources.Load<GameObject>($"Prefabs/Stages/{stageText}");
             if (stageObj == null) return;
 
-            // ÁöÁ¤ÇÑ ½ºÅ×ÀÌÁöÀÇ Çà°ú ¿­ÀÇ °ªÀ» ¹ŞÀ½(¹è¿­ÀÇ Å©±â°ªÀ» ±¸ÇÏ°í)
             height = stages[stage].Map.GetLength(0);
             width = stages[stage].Map.GetLength(1);
-            // ½ºÇÁ¶óÀÌÆ® ¹è¿­À» »ı¼º
             sprites = new SpriteRenderer[height, width];
 
-            // ½ºÅ×ÀÌÁö »ı¼º
             stageGameObject = Instantiate(stageObj, Vector3.zero, Quaternion.identity);
         }
 
-        /// <summary>
-        /// »ı¼ºµÈ ½ºÅ×ÀÌÁö¸¦ ¹Ş¾Æ¼­ ½ºÇÁ¶óÀÌÆ® »ğÀÔ
-        /// </summary>
         private void SetSprits(GameObject stageGameObject)
         {
-            // ½ºÅ×ÀÌÁö ºÎ¸ğ ¿ÀºêÁ§Æ®ÀÇ Æ®·£½ºÆû
             Transform rootTransform = stageGameObject.transform;
-
-            // rootTransform ¿ÀºêÁ§Æ® ¹Ø¿¡ ÀÖ´Â ½ºÅ×ÀÌÁöµé ¼ö¸¸Å­ ¹İº¹
             for (int i = 0; i < rootTransform.childCount; i++)
             {
-                // À§¿¡¼­ºÎÅÍ ¼ø¼­´ë·Î child¿¡ ³ÖÀ½ 
                 Transform child = rootTransform.GetChild(i);
                 var rc = child.name.Split(",");
-                //  rc name ÀÔ·Â¹ŞÀ½
                 int.TryParse(rc[0], out int row);
                 int.TryParse(rc[1], out int column);
-
-                // ½ºÇÁ¶óÀÌÆ® ¹è¿­¿¡ ¿ä¼Ò¸¦ Ã¤¿ò(row,column À§Ä¡¿¡ °¢°¢ ½ºÇÁ¶óÀÌÆ® ³ÖÀ½)
                 sprites[row, column] = child.GetComponent<SpriteRenderer>();
             }
         }
 
-
-        /// <summary>
-        /// Ä«¸Ş¶ó À§Ä¡ ¼³Á¤
-        /// </summary>
         private void SetCameraPosition(int stage)
         {
-            // Ä«¸Ş¶ó°¡ ¾ø°í Ä«¸Ş¶ó Æ÷Áö¼ÇÀÇ ¼ö°¡ 0º¸´Ù Å©¸é
             if (gameCamera != null && cameraPositions.Count > 0)
             {
                 Vector3 position = cameraPositions[stage];
                 position.z = gameCamera.transform.position.z;
-                // cameraPositions List¸¦ <Position>ÀÌ ¾Æ´Ñ <Vector2>·Î ÇØ³õÀ¸¸é »ç¿ë°¡´É
                 gameCamera.transform.position = position;
             }
         }
 
-        /// <summary>
-        /// currentBoard(ÇöÀç º¸µå) ¼³Á¤
-        /// </summary>
         private void SetCurrentBoard(int stage)
         {
-            //ÇöÀç º¸µå¿¡ ¹è¿­À» ÇÒ´ç
             currentBoard = new int[height, width];
-
-            //½ºÅ×ÀÌÁö µ¥ÀÌÅÍ¸¦ CurrtentBoard¿¡º¹»çÇÔ
             Array.Copy(stages[stage].Map, currentBoard, currentBoard.Length);
         }
 
-        /// <summary>
-        /// º¸µåÆÇ¿¡¼­ GoalÀÇ À§Ä¡Ã£¾Æ¼­ ¸®½ºÆ®¿¡ ÀúÀå
-        /// </summary>
         private void FindGoalPositions()
         {
-            // ÀúÀå¼ÒÀÇ ³»¿ëÀ» »èÁ¦
             goalPositions.Clear();
-
             if (currentBoard == null) return;
 
-            //º¸µåÆÇ ¼øÈ¸
             for (int r = 0; r < currentBoard.GetLength(0); r++)
             {
                 for (int c = 0; c < currentBoard.GetLength(1); c++)
                 {
                     if (currentBoard[r, c] == Goal)
                     {
-                        //¾ÆÀÌÅÛÀ» ³ÖÀ» ¼ö ÀÖ´Â °ø°£ÀÎ °æ¿ì À§Ä¡¸¦ ÀúÀå
-                        // ¸Ş¸ğ¸®¸¦ ÇÒ´çÇÏ¸é¼­ ÀúÀå
                         Position position = new Position { X = c, Y = r };
                         goalPositions.Add(position);
                     }
@@ -262,24 +149,13 @@ namespace RetroSokoban
             }
         }
 
-        /// <summary>
-        /// ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-        /// </summary>
         private void SetPlayerPosition()
         {
-            // Player ½ºÅ©¸³Æ® Ã£¾Æ¿À±â
             player = FindFirstObjectByType<Player>();
-
-            // Ä³¸¯ÅÍÀÇ À§Ä¡¸¦ Ã£À½
             FindPlayerPosition();
-
-            // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
             player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y);
         }
 
-        /// <summary>
-        /// 2Â÷¿ø ¹è¿­¿¡¼­ Ä³¸¯ÅÍÀÇ À§Ä¡¸¦ Ã£À½
-        /// </summary>
         public void FindPlayerPosition()
         {
             for (int r = 0; r < currentBoard.GetLength(0); r++)
@@ -296,432 +172,145 @@ namespace RetroSokoban
             }
         }
 
-        // ÀÔ·Â Å° Á¶Á¤
         public void HandleInput(Direction direction)
         {
-            //ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ Ã£À½
             FindPlayerPosition();
-
-            //Å° ÀÔ·ÂÀ» ¹Ş¾Æ¼­ Ã³¸®ÇÏ´Â ³»¿ë
             InputMoveKey(direction);
-
-            // °ñÀÚ¸®°¡ ºñ¾îÀÖÀ¸¸é ´Ù½Ã ±×¸®±â
-            IsGoalEmpty();
-
-            //°ÔÀÓÀÌ Å¬¸®¾î µÇ¾úÀ» ¶§ Ã³¸®
             ClearGame();
         }
 
-        // ÀÔ·Â Å° Á¶Á¤
         public void InputMoveKey(Direction direction)
         {
-            //ÀÔ·ÂµÈ Å°°ªÀ» ¹Ş¾Æ¿È
-            //Å° ÀÔ·ÂÀ» ¹Ş¾Æ¼­ Ã³¸®ÇÏ´Â ³»¿ë
+            int dx = 0;
+            int dy = 0;
+
             switch (direction)
             {
-                // x-1 Ä³¸¯ÅÍÀÇ ¿ŞÂÊ                
-                case Direction.Left:
-                    // Ä³¸¯ÅÍÀÇ ¿ŞÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
-                    if (currentBoard[playerPosition.Y, playerPosition.X - 1] == Empty ||
-                        currentBoard[playerPosition.Y, playerPosition.X - 1] == Goal)
-                    {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                        currentBoard[playerPosition.Y, playerPosition.X - 1] = Player;
-
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                        currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                        player.SetPosition(playerPosition.X - 1, (height - 1) - playerPosition.Y);
-                    }
-                    //Ä³¸¯ÅÍÀÇ ¿ŞÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-                    else if (currentBoard[playerPosition.Y, playerPosition.X - 1] == Box)
-                    {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
-                        if (currentBoard[playerPosition.Y, playerPosition.X - 2] == Empty ||
-                            currentBoard[playerPosition.Y, playerPosition.X - 2] == Goal)
-                        {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y, playerPosition.X - 2] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y, playerPosition.X - 1] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                            currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-
-                            // Box Ã³¸®
-                            sprites[playerPosition.Y, playerPosition.X - 2] = sprites[playerPosition.Y, playerPosition.X - 1];
-                            sprites[playerPosition.Y, playerPosition.X - 2].transform.position = new Vector3(playerPosition.X - 2, (height - 1) - playerPosition.Y);
-                            sprites[playerPosition.Y, playerPosition.X - 1] = null;
-
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                            player.transform.position = new Vector3(playerPosition.X - 1, (height - 1) - playerPosition.Y);
-                        }
-                    }
-                    break;
-                case Direction.Right:
-                    // Ä³¸¯ÅÍÀÇ ¿À¸¥ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
-                    if (currentBoard[playerPosition.Y, playerPosition.X + 1] == Empty ||
-                        currentBoard[playerPosition.Y, playerPosition.X + 1] == Goal)
-                    {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                        currentBoard[playerPosition.Y, playerPosition.X + 1] = Player;
-
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                        currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                        // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                        player.SetPosition(playerPosition.X + 1, (height - 1) - playerPosition.Y);
-
-                    }
-                    //Ä³¸¯ÅÍÀÇ ¿À¸¥ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-                    else if (currentBoard[playerPosition.Y, playerPosition.X + 1] == Box)
-                    {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
-                        if (currentBoard[playerPosition.Y, playerPosition.X + 2] == Empty ||
-                            currentBoard[playerPosition.Y, playerPosition.X + 2] == Goal)
-                        {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y, playerPosition.X + 2] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y, playerPosition.X + 1] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                            currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
-                            sprites[playerPosition.Y, playerPosition.X + 2] =
-                                 sprites[playerPosition.Y, playerPosition.X + 1];
-                            sprites[playerPosition.Y, playerPosition.X + 2].transform.position =
-                                 new Vector3(playerPosition.X + 2, (height - 1) - playerPosition.Y);
-
-                            sprites[playerPosition.Y, playerPosition.X + 1] = null;
-
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                            player.transform.position = new Vector3(playerPosition.X + 1, (height - 1) - playerPosition.Y);
-                        }
-                    }
-                    break;
-                case Direction.Up:
-                    // Ä³¸¯ÅÍÀÇ À§ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
-                    if (currentBoard[playerPosition.Y - 1, playerPosition.X] == Empty ||
-                        currentBoard[playerPosition.Y - 1, playerPosition.X] == Goal)
-                    {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                        currentBoard[playerPosition.Y - 1, playerPosition.X] = Player;
-
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                        currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                        player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y + 1);
-
-                    }
-                    //Ä³¸¯ÅÍÀÇ À§ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-                    else if (currentBoard[playerPosition.Y - 1, playerPosition.X] == Box)
-                    {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ À§ÀÇ À§ÀÚ¸®)
-                        if (currentBoard[playerPosition.Y - 2, playerPosition.X] == Empty ||
-                            currentBoard[playerPosition.Y - 2, playerPosition.X] == Goal)
-                        {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ À§¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y - 2, playerPosition.X] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y - 1, playerPosition.X] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                            currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
-                            sprites[playerPosition.Y - 2, playerPosition.X] =
-                                 sprites[playerPosition.Y - 1, playerPosition.X];
-                            sprites[playerPosition.Y - 2, playerPosition.X].transform.position =
-                                 new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + 2);
-
-                            sprites[playerPosition.Y - 1, playerPosition.X] = null;
-
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                            player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + 1);
-
-                        }
-                    }
-                    break;
-                case Direction.Down:
-                    // Ä³¸¯ÅÍÀÇ ¾Æ·¡°¡ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
-                    if (currentBoard[playerPosition.Y + 1, playerPosition.X] == Empty ||
-                        currentBoard[playerPosition.Y + 1, playerPosition.X] == Goal)
-                    {
-                        // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                        // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                        currentBoard[playerPosition.Y + 1, playerPosition.X] = Player;
-
-                        //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                        currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                        // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                        player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y - 1);
-
-                    }
-                    //Ä³¸¯ÅÍÀÇ ¾Æ·¡¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-                    else if (currentBoard[playerPosition.Y + 1, playerPosition.X] == Box)
-                    {
-                        //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¾Æ·¡ÀÇ ¾Æ·¡ÀÚ¸®)
-                        if (currentBoard[playerPosition.Y + 2, playerPosition.X] == Empty ||
-                            currentBoard[playerPosition.Y + 2, playerPosition.X] == Goal)
-                        {
-                            // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                            // Ä³¸¯ÅÍÀÇ ¾Æ·¡¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y + 2, playerPosition.X] = Box;
-                            // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                            currentBoard[playerPosition.Y + 1, playerPosition.X] = Player;
-                            // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                            currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                            // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                            // Box Ã³¸®
-                            sprites[playerPosition.Y + 2, playerPosition.X] = sprites[playerPosition.Y + 1, playerPosition.X];
-                            sprites[playerPosition.Y + 2, playerPosition.X].transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y - 2);
-
-                            sprites[playerPosition.Y + 1, playerPosition.X] = null;
-
-                            // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                            player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y - 1);
-                        }
-                    }
-                    break;
+                case Direction.Up: dy = -1; break;
+                case Direction.Down: dy = 1; break;
+                case Direction.Left: dx = -1; break;
+                case Direction.Right: dx = 1; break;
             }
-        }
 
+            int px = playerPosition.X;
+            int py = playerPosition.Y;
 
-        /// <summary>
-        /// °ñ µé¾î°¬´Ù ³ª¿À¸é ´Ù½Ã ±×·ÁÁÖ±â
-        /// </summary>
-        public void IsGoalEmpty()
-        {
-            // ½ºÅ×ÀÌÁö Ãß°¡ ¸ğµå¿¡¼­´Â ¼øÈ¸ÇÏ´Â ¹üÀ§µµ º¯°æµÇ¾î¾ß ÇÔ
-            for (int i = 0; i < goalPositions.Count; i++)
+            int tx = px + dx;
+            int ty = py + dy;
+
+            int ntx = px + dx * 2;
+            int nty = py + dy * 2;
+
+            // ì´ë™ ë²”ìœ„ ë²—ì–´ë‚˜ë©´ ë¬´ì‹œ
+            if (tx < 0 || tx >= width || ty < 0 || ty >= height)
+                return;
+
+            // ë°•ìŠ¤ ë°€ê¸°
+            if (currentBoard[ty, tx] == Box)
             {
-                int row = goalPositions[i].Y;
-                int column = goalPositions[i].X;
-                if (currentBoard[row, column] == Empty)
+                if (ntx < 0 || ntx >= width || nty < 0 || nty >= height)
+                    return;
+
+                if (currentBoard[nty, ntx] == Empty || currentBoard[nty, ntx] == Goal)
                 {
-                    currentBoard[row, column] = Goal;
+                    // ë°•ìŠ¤ ì´ë™
+                    currentBoard[nty, ntx] = Box;
+                    currentBoard[ty, tx] = Empty;
+                    currentBoard[py, px] = Empty;
+                    currentBoard[ty, tx] = Player;
+                    playerPosition.X = tx;
+                    playerPosition.Y = ty;
+                    player.SetPosition(tx, (height - 1) - ty);
+
+                    // ğŸ”Š ë°•ìŠ¤ ë°€ê¸° ì‚¬ìš´ë“œ
+                    SoundManager.Instance.PlayPush();
                 }
             }
+            else if (currentBoard[ty, tx] == Empty || currentBoard[ty, tx] == Goal)
+            {
+                // ì¼ë°˜ ì´ë™
+                currentBoard[py, px] = Empty;
+                currentBoard[ty, tx] = Player;
+                playerPosition.X = tx;
+                playerPosition.Y = ty;
+                player.SetPosition(tx, (height - 1) - ty);
+
+                // ğŸ”Š ì´ë™ ì‚¬ìš´ë“œ
+                SoundManager.Instance.PlayMove();
+            }
         }
 
-        // ½ºÅ×ÀÌÁö Å¬¸®¾î½Ã Ã³¸®
+
         public void ClearGame()
         {
-            // °ñÀÌ ºñ¾îÀÖÁö ¾ÊÀ¸¸é true ¹İÈ¯ ½Ã
             if (IsLevelCleared())
             {
+                // ğŸ”Š ìŠ¤í…Œì´ì§€ í´ë¦¬ì–´ ì‚¬ìš´ë“œ
+                SoundManager.Instance.PlaySuccess();
+
                 if (currentStage >= totalStageCount)
                 {
-                    // UI°¡ ³ª¿Í¾ß ÇÔ
-                    print("¸ğµç½ºÅ×ÀÌÁö¸¦ Å¬¸®¾î");
-                    print("°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù!");
+                    print("ëª¨ë“ ìŠ¤í…Œì´ì§€ë¥¼ í´ë¦¬ì–´");
                     return;
                 }
-                else // goalPositions ¾È¿¡ Box ÀÖÁö ¾ÊÀº°Ô ÀÖÀ¸¸é
+                else
                 {
-                    // UI°¡ ³ª¿Í¾ß ÇÔ
-                    print("´ÙÀ½ ½ºÅ×ÀÌÁö¸¦ ÇÃ·¹ÀÌ ÇÏ½Ã°Ú½À´Ï±î?");
-                    print("´ÙÀ½ ½ºÅ×ÀÌÁö·Î ÀÌµ¿ÇÏ·Á¸é yÅ°¸¦ ÀÔ·Â");
-                    _uiManager.OpenInfoNextStage();                        
-
-                    // To do...
-                    // ´ÙÀ½½ºÅ×ÀÌÁöÀÌµ¿Å°(R, A¹öÆ°) ÀÔ·Â¹Ş±â => ¹öÆ°Ã³¸®
-                    //ClickNextStageButton();
+                    print("ë‹¤ìŒ ìŠ¤í…Œì´ì§€ë¡œ ì´ë™í•˜ë ¤ë©´ yí‚¤ë¥¼ ì…ë ¥");
+                    _uiManager.OpenInfoNextStage();
                 }
             }
         }
 
-        /// <summary>
-        /// Goal¿¡ BoxÁ¸Àç À¯¹« È®ÀÎ
-        /// </summary>
-        /// <returns></returns>
-        // ¾ÆÀÌÅÛÀ» ÀúÀåÇÒ °ø°£À» ¼øÈ¸ÇÏ°í Box°¡ ¾øÀ¸¸é false
         private bool IsLevelCleared()
         {
             for (int i = 0; i < goalPositions.Count; i++)
             {
                 int row = goalPositions[i].Y;
                 int column = goalPositions[i].X;
-                // °ñ¿¡ box°¡ ¾øÀ¸¸é ³ÖÀ» ¼ö ÀÖ°Ô
                 if (currentBoard[row, column] != Box)
                     return false;
             }
             return true;
         }
 
-
-        // ´ÙÀ½½ºÅ×ÀÌÁöÀÌµ¿Å°(R) ÀÔ·Â¹Ş±â => UI¸Å´ÏÀú·Î ¿Å±â±â
         public void ClickNextStageButton()
         {
-            // vr¿¡¼± A¹öÆ°
-
-            // ´©¸¦¶§ Ã³¸®
             ++currentStage;
             Setupstage(currentStage - 1);
         }
 
-        // ¼ÒÄÚ¹İ ½ºÅ×ÀÌÁö ³» ÀÌµ¿Ã³¸®
-        /// <summary>
-        /// ÁÂ,¿ì ÀÌµ¿Ã³¸®
-        /// </summary>
-        public void MoveHorizontal(int moveNumber1, int moveNumber2)
-        {
-            if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Empty ||
-                        currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Goal)
-            {
-                // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] = Player;
-
-                //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                player.SetPosition(playerPosition.X + moveNumber1, (height - 1) - playerPosition.Y);
-            }
-            //Ä³¸¯ÅÍÀÇ ¿ŞÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-            else if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] == Box)
-            {
-                //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ ¿·ÀÇ ¿·ÀÚ¸®)
-                if (currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] == Empty ||
-                    currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] == Goal)
-                {
-                    // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                    // Ä³¸¯ÅÍÀÇ ¿·¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                    currentBoard[playerPosition.Y, playerPosition.X + moveNumber2] = Box;
-                    // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                    currentBoard[playerPosition.Y, playerPosition.X + moveNumber1] = Player;
-                    // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                    currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                    // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-
-                    // Box Ã³¸®
-                    sprites[playerPosition.Y, playerPosition.X + moveNumber2] = sprites[playerPosition.Y, playerPosition.X + moveNumber1];
-                    sprites[playerPosition.Y, playerPosition.X + moveNumber2].transform.position = new Vector3(playerPosition.X + moveNumber2, (height - 1) - playerPosition.Y);
-                    sprites[playerPosition.Y, playerPosition.X + moveNumber1] = null;
-
-                    // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                    player.transform.position = new Vector3(playerPosition.X + moveNumber1, (height - 1) - playerPosition.Y);
-                }
-            }
-        }
-
-        /// <summary>
-        /// À§, ¾Æ·¡ ÀÌµ¿Ã³¸®
-        /// </summary>
-        public void MoveVertical(int moveNumber1, int moveNumber2)
-        {
-            // Ä³¸¯ÅÍÀÇ À§ÂÊÀÌ ºñ¾îÀÖ°Å³ª ¾ÆÀÌÅÛÀ» ³õÀ» ¼ö ÀÖ´Â Àå¼ÒGoal ¶ó¸é ÀÌµ¿Ã³¸®
-            if (currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Empty ||
-                currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Goal)
-            {
-                // ¹è¿­ÀÇ °ªÀ» °»½ÅÇÏ´Â ÄÚµå ÀÓ
-                // Ä³¸¯ÅÍ¸¦ ÀÌµ¿
-                currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] = Player;
-
-                //Ä³¸¯ÅÍ°¡ÀÖ´ø ÀÚ¸®¿¡ ºñ¾îÀÖ´Â ½Äº°ÄÚµå¸¦ ³ÖÀ½
-                currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ´
-                player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y + moveNumber1);
-
-            }
-            //Ä³¸¯ÅÍÀÇ À§ÂÊ¿¡ ¹Ú½º°¡ ÀÖ´Ù¸é Ã³¸®
-            else if (currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] == Box)
-            {
-                //¹Ú½º¿· -2 ÀÌ ¹«¾ùÀÎÁö ºÁ¾ßÇÔ(Ä³¸¯ÅÍÀÇ À§ÀÇ À§ÀÚ¸®)
-                if (currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] == Empty ||
-                    currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] == Goal)
-                {
-                    // Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ ¼ö ÀÖ´Ù¸é ¹è¿­À» °»½Å
-                    // Ä³¸¯ÅÍÀÇ À§¿¡ ¹Ú½º¸¦ ¿Å±â°í
-                    currentBoard[playerPosition.Y + moveNumber2, playerPosition.X] = Box;
-                    // ¹Ú½º ÀÚ¸®¿¡ Ä³¸¯ÅÍ¸¦ ¿Å±â°í
-                    currentBoard[playerPosition.Y + moveNumber1, playerPosition.X] = Player;
-                    // Ä³¸¯ÅÍ ÀÚ¸®´Â ºñ¾î³õÀ½
-                    currentBoard[playerPosition.Y, playerPosition.X] = Empty;
-
-                    // Ä¿¼­ÀÇ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ÇÃ·¹ÀÌ¾î¸¦ Ãâ·Â(2Ä­Â¥¸®)
-                    // Box Ã³¸®
-                    sprites[playerPosition.Y + moveNumber2, playerPosition.X] =
-                         sprites[playerPosition.Y + moveNumber1, playerPosition.X];
-                    sprites[playerPosition.Y + moveNumber2, playerPosition.X].transform.position =
-                         new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + moveNumber2);
-
-                    sprites[playerPosition.Y + moveNumber1, playerPosition.X] = null;
-
-                    // ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
-                    player.transform.position = new Vector3(playerPosition.X, (height - 1) - playerPosition.Y + moveNumber1);
-                }
-            }
-        }
-
-        /// <summary>
-        /// °ÔÀÓ ¸®¼Â
-        /// </summary>
         public void GameReset()
         {
-            // ÇöÀç ½ºÅ×ÀÌÁö ¹øÈ£
             currentStage = 1;
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
             Setupstage(currentStage - 1);
         }
 
-        //Ä«¿îÆ® ´Ù¿î ·ÎÁ÷
-        // °ÔÀÓ¿À¹ö·ÎÁ÷
         public void TimeOver()
         {
-            // Å¸ÀÓ¿À¹ö UI È°¼º
             _uiManager.SetTimeOverActive();
         }
 
         private void HeartReset()
         {
-            // ÇÏÆ®°¹¼ö ÃÊ±âÈ­
             _heartHealth.SetHeartCount();
         }
 
         private void DeHeart()
         {
             var heartCount = _heartHealth.CalculateHeartCount();
-            // ÇÏÆ® ºñÈ°¼º
             _uiManager.HideHeart(heartCount);
         }
 
-        // Ä«¿îÆ®´Ù¿î Àç½ÃÀÛ
         public void CountdownReset()
         {
             _countdownTimer.CountdownInitialized();
         }
 
-
-        //ÇöÀç½ºÅ×ÀÌÁö ¸®ÇÃ·¹ÀÌ(¸®ÇÃ·¹ÀÌ ¹öÆ° Å¬¸¯)
         public void StageReset()
         {
-            //ÇÏÆ®Â÷°¨
             DeHeart();
-
-            // ÇöÀç ½ºÅ×ÀÌÁö ¹øÈ£
-            // currentStage = currentStage
-
-            // ÇöÀç ½ºÅ×ÀÌÁö¸¦ ±¸¼º
             Setupstage(currentStage - 1);
         }
 
-    } // ¼ÒÄÚ¹İ ¸Å´ÏÀú Å¬·¡½º
-}
+    } // í´ë˜ìŠ¤ ë
+} // ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ë
