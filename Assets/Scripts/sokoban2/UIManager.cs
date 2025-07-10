@@ -1,7 +1,4 @@
-using ArcadeMiniGames;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.MPE;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,11 +39,10 @@ namespace RetroSokoban
         [SerializeField] private Button btnReplaySokoban;   //소코반 리플레이 버튼
         [SerializeField] private Button btnNextstageSokoban;     //소코반 다음스테이지 버튼
 
-
         private GameManager _gameManager;       // 게임매니저
         private SokobanManager _skobanManager;  // 소코반 매니저
 
-        [SerializeField] private int pnlNoticeCount = 0;
+        [SerializeField] private int pnlNoticeCount = 0;    //공지창 카운트
 
 
         private void Awake()
@@ -104,13 +100,13 @@ namespace RetroSokoban
         /// <param name="mode"></param>
         public void SetUIMode(GameMode mode)
         {
-            //처음에 다 끄고 모드에 맞을때만 켜기
+            //처음에 다 끄고 설정된 모드만 켜기
             SetUIActive(GameMode.Start, false);
             SetUIActive(GameMode.Main, false);
             SetUIActive(GameMode.Sokoban, false);
 
 
-            //받은 모드에 따라서 배경 바꿈
+            //받은 모드에 따라서 UI 변경
             switch (mode)
             {
                 case GameMode.Start:
@@ -134,9 +130,9 @@ namespace RetroSokoban
         public void HideHeart(int heartNumber)
         {
             hpHearts[heartNumber].SetActive(false);
-            //Destroy(hpHearts[heartNumber]);
         }
 
+        // 하트다활성(초기화)
         public void ShowAllHeart()
         {
             for(int i = 0; i < hpHearts.Length; i++)
@@ -211,6 +207,7 @@ namespace RetroSokoban
         {
             // 현재 공지 끄기
             pnlNotice[pnlNoticeCount].SetActive(false);
+            // 공지창 카운트 +1
             pnlNoticeCount += 1;
             //다음 공지 켜기
             OpenNotice(pnlNoticeCount);
@@ -300,7 +297,10 @@ namespace RetroSokoban
         // 소코반 exit 버튼 클릭
         public void OnExitSokoban()
         {
+            // Exit패널(까만화면) 활성
             pnlGameExit.SetActive(true);
+            //공지 띄우기
+            pnlNotice[5].SetActive(true);
         }
 
         public void OffExitSokoban()
@@ -308,6 +308,5 @@ namespace RetroSokoban
             // 까만화면 비활성
             pnlGameExit.SetActive(false);
         }
-
     }
 }

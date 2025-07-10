@@ -111,31 +111,16 @@ namespace RetroSokoban
             // 소코반 초기세팅
             _sokobanManager?.InitializeSokoban();
 
-            // 인VR
-            _uiManager.SetUIMode(_gameMode);    //mainUi 활성
-
-
-
-
-            // 메인ui 열면 공지 보임(버튼클릭으로 넘어감)
-
-            // 공지 UI활성(전체 반투명 배경으로 레이캐스트 끔), 배경 블러
-            // 시작 버튼 클릭 시 공지 비활성, 배경정상
-            // 콘센트로 안내(위치 표시 또는 콘센트 빛(파티클 또는 포인트조명 처리)
-
-
-            // 코드 꼽기 행동 처리
-            // 전체 전원 공급
-            // 소코반 게임 공지
-
+            // 인VR, mainUi 활성
+            _uiManager.SetUIMode(_gameMode);
         }
 
         private void ProcessEnd()
         {
             //하트가 0이 되면 vr게임오버 UI활성
+            //기획변경 소코반 내에서만 하트 사용
         }
 
-        // 종료버튼 클릭 시  //SetgameMode(GameMode.Exit);
         // 프로그램 종료
         private void ProcessExit()
         {

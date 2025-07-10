@@ -57,6 +57,7 @@ namespace RetroSokoban
 
         //���� ��������
         [SerializeField] private int currentStage = 1;
+        [SerializeField] private int clearStage = 3;    //클리어 스테이지
 
         // �������� ������Ʈ
         private GameObject stageGameObject;
@@ -531,7 +532,7 @@ namespace RetroSokoban
             // ��� �� �ڽ��� ä�������� �˻� �� ä������ true��ȯ
             if (IsLevelCleared())
             {
-                //ī��Ʈ�ٿ� ����
+                //카운트다운 정지
                 StopCountdown();
 
                 if (currentStage >= totalStageCount)
@@ -559,18 +560,20 @@ namespace RetroSokoban
         private void CheckAndShowClearUI()
         {
             // 2�������� Ŭ���� ��
-            if (currentStage >= 2)
+            if (currentStage == clearStage)
             {
                 // Ŭ���� UI
                 _uiManager.SetClearSokobanUI(true);
             }
             else
             {
-                //_uiManager.OpenInfoNextStage();
+                _uiManager.OnNextStageClicked();
+                //_uiManager.SetInfoNextStageUI(true);
+
                 // To do...
                 // �������������̵�Ű(R, A��ư) �Է¹ޱ� => ��ưó��
                 // ���� �������� �̵�
-                ClickNextStageButton();
+               // ClickNextStageButton();
             }
         }
 
