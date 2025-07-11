@@ -9,7 +9,6 @@ public class SoundManager : MonoBehaviour
     public AudioClip gameOverSound;
 
     // 새로 추가된 사운드
-    public AudioClip moveSound;
     public AudioClip stageProgressSound;
 
     private AudioSource audioSource;
@@ -51,6 +50,6 @@ public class SoundManager : MonoBehaviour
     public void PlayGameOver() => PlaySound(gameOverSound);
 
     // 새 사운드
-    public void PlayMove() => PlaySound(moveSound);
+
     public void PlayStageProgress() => PlaySound(stageProgressSound);
 }
