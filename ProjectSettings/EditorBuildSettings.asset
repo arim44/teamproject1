@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/1_Scenes/Main.unity
     guid: 77de999ab82a20d4b85007df73814441
   - enabled: 0
-    path: Assets/DownAssets/OHGAR/XRKJ/XRKJ Demo Scene.unity
+    path: Assets/8_DownAssets/OHGAR/XRKJ/XRKJ Demo Scene.unity
     guid: 865a8203935d79145a9c734bffff4bad
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 98e7c23232a70094d8f24c735d640b6a, type: 2}
