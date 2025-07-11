@@ -96,27 +96,24 @@ namespace RetroSokoban
             // 스테이지 데이터 할당
             SetStages(stages);
 
-            //��Ʈ �ʱ�ȭ
+            // 하트 초기화
             HeartReset();
-
-            // ���� ���������� ����(�ؿ� �ִ°� ���� �ø�) ���۹�ư ������ �������� ����
-            //Setupstage(currentStage - 1);
         }
 
-        // ���ڹ� ����
+        // 소코반 시작
         public void StartSokoban()
         {
-            // ���� ���������� ����
+            // 현재 스테이지를 구성
             Setupstage(currentStage - 1);
         }
 
 
         /// <summary>
-        /// Json���� ������ �ε�
+        /// Json에서 데이터 로드
         /// </summary>
         private List<Sokoban_StageData> LoadJsonDate()
         {
-            // Ȯ���� ���� ���� �̸��� �ᵵ �� json���� ��������
+            // json파일 가져오기 (확장자 없이 파일 이름만 써도 됨)
             TextAsset asset = Resources.Load<TextAsset>("JsonFiles/Sokoban");
             stages = JsonConvert.DeserializeObject<List<Sokoban_StageData>>(asset.text);
 
@@ -124,7 +121,7 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// �������� ������ �Ҵ��ϱ� (���̽����� ������ ȣ��)
+        /// 스테이지 데이터 할당하기 (제이슨에서 읽은후 호출)
         /// </summary>
         /// <param name="stages"></param>
         public void SetStages(List<Sokoban_StageData> stages)
@@ -134,135 +131,128 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// ���������� �����
+        /// 스테이지들 만들기
         /// </summary>
         /// <param name="stage"></param>
         public void Setupstage(int stage)
         {
-            // �������� ����
+            // 스테이지 생성
             CreateStage(stage);
 
-            // ��������Ʈ ����
+            // 스프라이트 설정
             SetSprits(stageGameObject);
 
-            // ī�޶� ��ġ ����
+            // 카메라 위치 설정
             SetCameraPosition(stage);
 
-            // ���� ���� ����
+            // 현재 보드 설정
             SetCurrentBoard(stage);
 
-            // Goal ��ġ ������������ �������� ������ ������ ã��
+            // Goal 위치 스테이지에서 아이템을 저장할 공간을 찾음
             FindGoalPositions();
 
-            // �÷��̾� ��ġ ����
+            // 플레이어 위치 설정
             SetPlayerPosition();
 
-            // ī��Ʈ�ٿ� �����
+            // 카운트다운 재시작
             CountdownReset();
         }
 
         /// <summary>
-        /// �������� ���� �� ��������Ʈ ����
+        /// 스테이지 생성 후 스프라이트 삽입
         /// </summary>
         /// <param name="stage"></param>
         private void CreateStage(int stage)
         {
-            // ���� ���������� �����ִٸ� ����
+            // 기존 스테이지가 남아있다면 삭제
             if (stageGameObject != null) Destroy(stageGameObject);
 
-            //���� �������� �̸��� ����
+            //현재 스테이지 이름을 구함
             string stageText = $"Stage{stage + 1}";
-            // ���ҽ��� �ε�
+            // 리소스를 로드
             var stageObj = Resources.Load<GameObject>($"Prefabs/Stages/{stageText}");
             if (stageObj == null) return;
 
-            // ������ ���������� ��� ���� ���� ����(�迭�� ũ�Ⱚ�� ���ϰ�)
+            // 지정한 스테이지의 행과 열의 값을 받음(배열의 크기값을 구하고)
             height = stages[stage].Map.GetLength(0);
             width = stages[stage].Map.GetLength(1);
-            // ��������Ʈ �迭�� ����
+            // 스프라이트 배열을 생성
             sprites = new SpriteRenderer[height, width];
 
-            // �������� ����
+            // 스테이지 생성
             stageGameObject = Instantiate(stageObj, Vector3.zero, Quaternion.identity);
         }
 
         /// <summary>
-        /// ������ ���������� �޾Ƽ� ��������Ʈ ����
+        /// 생성된 스테이지를 받아서 스프라이트 삽입
         /// </summary>
         private void SetSprits(GameObject stageGameObject)
         {
-            // �������� �θ� ������Ʈ�� Ʈ������
+            // 스테이지 부모 오브젝트의 트랜스폼
             Transform rootTransform = stageGameObject.transform;
 
-            // rootTransform ������Ʈ �ؿ� �ִ� ���������� ����ŭ �ݺ�
+            // rootTransform 오브젝트 밑에 있는 스테이지들 수만큼 반복
             for (int i = 0; i < rootTransform.childCount; i++)
             {
-                // ���������� ������� child�� ���� 
+                // 위에서부터 순서대로 child에 넣음 
                 Transform child = rootTransform.GetChild(i);
                 var rc = child.name.Split(",");
-                //  rc name �Է¹���
+                //  rc name 입력받음
                 int.TryParse(rc[0], out int row);
                 int.TryParse(rc[1], out int column);
 
-                // ��������Ʈ �迭�� ��Ҹ� ä��(row,column ��ġ�� ���� ��������Ʈ ����)
+                // 스프라이트 배열에 요소를 채움(row,column 위치에 각각 스프라이트 넣음)
                 sprites[row, column] = child.GetComponent<SpriteRenderer>();
             }
         }
 
 
         /// <summary>
-        /// ī�޶� ��ġ ����
+        /// 카메라 위치 설정
         /// </summary>
         private void SetCameraPosition(int stage)
         {
-            // ī�޶� ���� ī�޶� �������� ���� 0���� ũ��
+            // 카메라가 없고 카메라 포지션의 수가 0보다 크면
             if (gameCamera != null && cameraPositions.Count > 0)
             {
-                try
-                {
-                    Vector3 position = cameraPositions[stage];
-                    position.z = gameCamera.transform.position.z;
-                    // cameraPositions List�� <Position>�� �ƴ� <Vector2>�� �س����� ��밡��
-                    gameCamera.transform.position = position;
-                }
-                catch( Exception e )
-                {
-                    print(e);
-                }
+                Vector3 position = cameraPositions[stage];
+                position.z = gameCamera.transform.position.z;
+                // cameraPositions List를 <Position>이 아닌 <Vector2>로 해놓으면 사용가능
+                gameCamera.transform.position = position;
             }
         }
 
         /// <summary>
-        /// currentBoard(���� ����) ����
+        /// currentBoard(현재 보드) 설정
         /// </summary>
         private void SetCurrentBoard(int stage)
         {
-            //���� ���忡 �迭�� �Ҵ�
+            //현재 보드에 배열을 할당
             currentBoard = new int[height, width];
 
-            //�������� �����͸� CurrtentBoard��������
+            //스테이지 데이터를 CurrtentBoard에복사함
             Array.Copy(stages[stage].Map, currentBoard, currentBoard.Length);
         }
 
         /// <summary>
-        /// �����ǿ��� Goal�� ��ġã�Ƽ� ����Ʈ�� ����
+        /// 보드판에서 Goal의 위치찾아서 리스트에 저장
         /// </summary>
         private void FindGoalPositions()
         {
-            // ������� ������ ����
+            //저장소의 내용을 삭제
             goalPositions.Clear();
 
             if (currentBoard == null) return;
 
-            //������ ��ȸ
+            // 보드판 순회
             for (int r = 0; r < currentBoard.GetLength(0); r++)
             {
                 for (int c = 0; c < currentBoard.GetLength(1); c++)
                 {
                     if (currentBoard[r, c] == Goal)
                     {
-                        //�������� ���� �� �ִ� ������ ��� ��ġ�� ����
-                        // �޸𸮸� �Ҵ��ϸ鼭 ����
+                        //아이템을 넣을 수 있는 공간인 경우 위치를 저장
+                        // 메모리를 할당하면서 저장
                         Position position = new Position { X = c, Y = r };
                         goalPositions.Add(position);
                     }
@@ -271,22 +261,22 @@ namespace RetroSokoban
         }
 
         /// <summary>
-        /// �÷��̾� ��ġ ����
+        /// 플레이어 위치 설정
         /// </summary>
         private void SetPlayerPosition()
         {
-            // Player ��ũ��Ʈ ã�ƿ���
+            // Player 스크립트 찾아오기
             player = FindFirstObjectByType<Player>();
 
-            // ĳ������ ��ġ�� ã��
+            // 캐릭터의 위치를 찾음
             FindPlayerPosition();
 
-            // �÷��̾��� ��ġ�� �̵���Ŵ
+            // 플레이어의 위치를 이동시킴
             player.SetPosition(playerPosition.X, (height - 1) - playerPosition.Y);
         }
 
         /// <summary>
-        /// 2���� �迭���� ĳ������ ��ġ�� ã��
+        /// 2차원 배열에서 캐릭터의 위치를 찾음
         /// </summary>
         public void FindPlayerPosition()
         {
@@ -304,27 +294,27 @@ namespace RetroSokoban
             }
         }
 
-        // �Է� Ű ����
+        // 입력 키 조정
         public void HandleInput(Direction direction)
         {
-            //�÷��̾��� ��ġ�� ã��
+            //플레이어의 위치를 찾음
             FindPlayerPosition();
 
-            //Ű �Է��� �޾Ƽ� ó���ϴ� ����
+            //키 입력을 받아서 처리하는 내용
             InputMoveKey(direction);
 
-            // ���ڸ��� ��������� �ٽ� �׸���
+            // 골자리가 비어있으면 다시 그리기
             IsGoalEmpty();
 
-            //������ Ŭ���� �Ǿ��� �� ó��
+            //게임이 클리어 되었을 때 처리
             ClearGame();
         }
 
-        // �Է� Ű ����
+        // 입력 키 조정
         public void InputMoveKey(Direction direction)
         {
-            //�Էµ� Ű���� �޾ƿ�
-            //Ű �Է��� �޾Ƽ� ó���ϴ� ����
+            //입력된 키값을 받아옴
+            //키 입력을 받아서 처리하는 내용
             switch (direction)
             {
                 // x-1 ĳ������ ����                
@@ -528,7 +518,7 @@ namespace RetroSokoban
 
         // �������� Ŭ����� ó��
         public void ClearGame()
-        {            
+        {
             // ��� �� �ڽ��� ä�������� �˻� �� ä������ true��ȯ
             if (IsLevelCleared())
             {
@@ -576,7 +566,7 @@ namespace RetroSokoban
                 // To do...
                 // �������������̵�Ű(R, A��ư) �Է¹ޱ� => ��ưó��
                 // ���� �������� �̵�
-               // ClickNextStageButton();
+                // ClickNextStageButton();
             }
         }
 
